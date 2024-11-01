@@ -38,6 +38,8 @@
       </a-scene>
 
       <script>
+         window.addEventListener("click", ()=>{document.getElementById("video").play();})
+
         const marker = document.querySelector("#marker");
         marker.addEventListener("markerFound", () => {
           document.getElementById("video").play();
