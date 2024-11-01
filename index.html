@@ -9,18 +9,27 @@
   </head>
   <body style="margin : 0px; overflow: hidden;">
       <a-scene embedded arjs>
+        
         <a-assets>
           <video id="video" src="video-file.mp4"></video>
         </a-assets>
 
-        <a-marker type ='pattern' url = './marker-patterns/pattern-D-Lab-marker.patt'>
+        <a-marker id="marker" type ='pattern' url = './marker-patterns/pattern-D-Lab-marker.patt' preset='custom' emitevents="true"
+                  smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
           <a-video src="#video" width="1" heiight="1" position="0 0 0" rotation="-90 0 0">  </a-video>
         </a-marker>
         <a-entity camera></a-entity>
       </a-scene>
 
     <script>
-      window.addEventListener("click", ()=>{document.getElementById("video").play();})
+      const marker = document.querySelector("#marker");
+      marker.addEventListener("markerFound", () => {
+        document.getElementById("video").play();
+      });
+      marker.addEventListener("markerLost", () => {
+      document.getElementById("video").pause();
+      });
     </script>
+    
   </body>
 </html>
