@@ -16,14 +16,15 @@
         </a-assets>
 
         <!--a-marker preset="hiro" emitevents="true" id="marker"-->
-        <a-marker id="marker" type ='pattern' url = './marker-patterns/pattern-Untitled Project.patt' preset='custom' emitevents="true"
+        <a-marker id="marker" type ='pattern' url = './marker-patterns/pattern-dlab-marker.patt' preset='custom' emitevents="true"
                   smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
           <a-video src="#video" width="1" heiight="1" position="0 0 0" rotation="-90 0 0">  </a-video>
         </a-marker>
 
         <!-- handle marker with hiro preset -->
-        <a-marker preset='hiro'>
-          <a-box position='0 0.5 0' material='color: green;'></a-box>
+        <a-marker id="marker1" preset='hiro'>
+          <a-video src="#video" width="1" heiight="1" position="0 0 0" rotation="-90 0 0">  </a-video>
+          <!--a-box position='0 0.5 0' material='color: green;'></a-box-->
         </a-marker>
     
         <!-- handle barcode marker -->
@@ -41,6 +42,15 @@
           document.getElementById("video").play();
         });
         marker.addEventListener("markerLost", () => {
+        document.getElementById("video").pause();
+        });
+
+
+        const marker1 = document.querySelector("#marker1");
+        marker1.addEventListener("markerFound", () => {
+          document.getElementById("video").play();
+        });
+        marker1.addEventListener("markerLost", () => {
         document.getElementById("video").pause();
         });
       </script>
