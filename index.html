@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-  <!-- we import arjs version without NFT but with marker + location based support -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>QR Code based AR Solution</title>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  </head>
   <body style="margin : 0px; overflow: hidden;">
-    <a-scene embedded arjs>
-      <a-assets>
-        <video id="video" src="video-file.mp4"></video>
-      </a-assets>
+      <a-scene embedded arjs>
+        <a-assets>
+          <video id="video" src="video-file.mp4"></video>
+        </a-assets>
 
-      <a-marker type ='pattern' url = './marker-patterns/pattern-D-Lab-marker.patt'>
-        <a-video src="#video" width="1" heiight="1" position="0 0 0" rotation="-90 0 0">  </a-video>
-      </a-marker>
-      <a-entity camera></a-entity>
-    </a-scene>
+        <a-marker type ='pattern' url = './marker-patterns/pattern-D-Lab-marker.patt'>
+          <a-video src="#video" width="1" heiight="1" position="0 0 0" rotation="-90 0 0">  </a-video>
+        </a-marker>
+        <a-entity camera></a-entity>
+      </a-scene>
 
-<script>
-  window.addEventListener("click", ()=>{document.getElementById("video").play();})
-</script>
-
+    <script>
+      window.addEventListener("click", ()=>{document.getElementById("video").play();})
+    </script>
   </body>
 </html>
