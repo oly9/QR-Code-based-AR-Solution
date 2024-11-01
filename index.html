@@ -14,8 +14,9 @@
           <video id="video" src="video-file.mp4"></video>
         </a-assets>
 
-        <a-marker id="marker" type ='pattern' url = './marker-patterns/pattern-D-Lab-marker.patt' preset='custom' emitevents="true"
-                  smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
+        <!--a-marker id="marker" type ='pattern' url = './marker-patterns/pattern-D-Lab-marker.patt' preset='custom' emitevents="true"
+                  smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2"-->
+                  <a-marker preset="hiro" emitevents="true" id="marker">
           <a-video src="#video" width="1" heiight="1" position="0 0 0" rotation="-90 0 0">  </a-video>
         </a-marker>
         <a-entity camera></a-entity>
