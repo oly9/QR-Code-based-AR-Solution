@@ -23,8 +23,8 @@
 
         <!-- handle marker with hiro preset -->
         <a-marker id="marker1" preset='hiro'>
-          <a-video src="#video" width="1" heiight="1" position="0 0 0" rotation="-90 0 0">  </a-video>
-          <!--a-box position='0 0.5 0' material='color: green;'></a-box-->
+          <!--a-video src="#video" width="1" heiight="1" position="0 0 0" rotation="-90 0 0">  </a-video-->
+          <a-box position='0 0.5 0' material='color: green;'></a-box>
         </a-marker>
     
         <!-- handle barcode marker -->
@@ -46,13 +46,7 @@
         });
 
 
-        const marker1 = document.querySelector("#marker1");
-        marker1.addEventListener("markerFound", () => {
-          document.getElementById("video").play();
-        });
-        marker1.addEventListener("markerLost", () => {
-        document.getElementById("video").pause();
-        });
+
       </script>
 
     </body>
