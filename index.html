@@ -4,33 +4,22 @@
     <meta charset="utf-8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>QR Code based AR Solution</title>
-    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  </head>
-  <body style="margin : 0px; overflow: hidden;">
-      <a-scene embedded arjs>
-        
-        <a-assets>
-          <video id="video" src="video-file.mp4"></video>
-        </a-assets>
+    <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+    <body style='margin : 0px; overflow: hidden;'>
+      <a-scene embedded arjs='sourceType: webcam;'>
 
-        <!--a-marker preset="hiro" emitevents="true" id="marker"-->
-        <a-marker id="marker" type ='pattern' url = './marker-patterns/pattern-D-Lab-marker.patt' preset='custom' emitevents="true"
-                  smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
-          <a-video src="#video" width="1" heiight="1" position="0 0 0" rotation="-90 0 0">  </a-video>
+        <!-- handle marker with hiro preset -->
+        <a-marker preset='hiro'>
+          <a-box position='0 0.5 0' material='color: green;'></a-box>
         </a-marker>
+    
+        <!-- handle barcode marker -->
+        <a-marker type='barcode' value='5'>
+          <a-box position='0 0.5 0' material='color: blue;'></a-box>
+        </a-marker>
+    
+        <!-- add a simple camera -->
         <a-entity camera></a-entity>
       </a-scene>
-
-    <script>
-      const marker = document.querySelector("#marker");
-      marker.addEventListener("markerFound", () => {
-        document.getElementById("video").play();
-      });
-      marker.addEventListener("markerLost", () => {
-      document.getElementById("video").pause();
-      });
-    </script>
-    
-  </body>
-</html>
+    </body>
