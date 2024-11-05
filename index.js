@@ -39,12 +39,12 @@ window.addEventListener("load", function () {
 
     // Data to send to the API
     const data = {
-        id: "lhBHOn9", // replace this with a dynamic user or session ID if needed
+        id: "kX3Onnj", // replace this with a dynamic user or session ID if needed
         deviceName: deviceType
     };
 
     // Send the data to the API
-    fetch('http://localhost:3000/api/collect-device-info', {
+    fetch('https://qrgen-tau.vercel.app/api/collect-device-info', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
