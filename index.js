@@ -5,7 +5,7 @@ window.addEventListener("click", () => { document.getElementById("video_assect")
 
 
 const scanUI = document.querySelector("#scan-ui")
-
+const baseUIL = 'http://178.128.116.81/cms/'
 
 
 const marker = document.querySelector("#marker");
@@ -46,7 +46,7 @@ window.addEventListener("load", function () {
     // Send the data to the API
     //new cms http://178.128.116.81/cms
     //new cms https://qrgen-tau.vercel.app/api/collect-device-info
-    fetch('http://178.128.116.81/cms', {
+    fetch(baseUIL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -127,6 +127,41 @@ function getAllUrlParams(url) {
 
 
 console.log(getAllUrlParams(window.location.href))
+
+var sourceData = getAllUrlParams(window.location.href)
+//generate tag and pattern
+
+const arScene = document.querySelector("#ARScene")
+const assets  = document.querySelector("#assets")
+
+console.log(arScene)
+console.log(assets)
+
+
+var fatchdataURL = baseUIL+'/api/uploads/'
+var patternUrl = fatchdataURL+sourceData.video
+var videoUrl = fatchdataURL+sourceData.pattern
+
+
+console.log("Data:  "+sourceData)
+console.log("baseurl:  "+fatchdataURL)
+
+console.log("PatternURL:  "+patternUrl)
+console.log("VideoURL:  "+videoUrl)
+
+
+
+
+// $("#videoWrapper").append($("<a-marker id='dynamic_marker' type ='pattern' url = './marker-patterns/pattern-dlab-marker.patt' preset='custom' emitevents="true"
+// smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
+// <a-video  id="player" src="#video_assect" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">  </a-video>
+// </a-marker>"));
+
+
+
+
+
+
 
 
 /////////////////////////////////////////////////////////////// NOT IN THE SCOPE  ////////////////////////////////////////
