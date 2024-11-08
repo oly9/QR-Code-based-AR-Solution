@@ -149,7 +149,14 @@ console.log("VideoURL:  " + videoUrl)
 // Set your video source here
 
 // Append the `a-marker` and `a-video` tags with dynamic URL and src
+function rerenderScene() {
+    const scene = document.querySelector('a-scene');
 
+    if (scene && scene.hasLoaded) {
+        // Trigger a reload on all components
+        scene.emit('reloaded');
+    }
+}
 
 
 // Define the URLs of the marker pattern and video file
@@ -178,6 +185,10 @@ async function loadFiles() {
         const video = document.querySelector('#video_assect');
         video.setAttribute('src', videoBlobUrl);
 
+        
+        
+        // Call the rerender function when needed
+        rerenderScene();
 
         // // Append the marker and video elements to the A-Frame scene
         // $(assets).append(`
