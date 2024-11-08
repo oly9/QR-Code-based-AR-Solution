@@ -9,11 +9,11 @@ const baseUIL = 'https://178.128.116.81/cms/'
 
 
 const marker = document.querySelector("#marker");
-marker.addEventListener("markerFound", () => {    
+marker.addEventListener("markerFound", () => {
     $(scanUI).hide();
     document.getElementById("video_assect").play();
 });
-marker.addEventListener("markerLost", () => {    
+marker.addEventListener("markerLost", () => {
     $(scanUI).show();
     document.getElementById("video_assect").pause();
 });
@@ -53,9 +53,9 @@ window.addEventListener("load", function () {
         },
         body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(data => console.log("Device info sent:", data))
-    .catch(error => console.error("Error sending device info:", error));
+        .then(response => response.json())
+        .then(data => console.log("Device info sent:", data))
+        .catch(error => console.error("Error sending device info:", error));
 });
 
 
@@ -64,60 +64,60 @@ function getAllUrlParams(url) {
 
     // get query string from url (optional) or window
     var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
-  
+
     // we'll store the parameters here
     var obj = {};
-  
+
     // if query string exists
     if (queryString) {
-  
-      // remove stuff after #, as it’s not part of the query string
-      queryString = queryString.split('#')[0];
-  
-      // split the query string into component parts
-      var arr = queryString.split('&');
-  
-      for (var i = 0; i < arr.length; i++) {
-        // separate the keys and values
-        var a = arr[i].split('=');
-  
-        // set parameter name and value (use 'true' if empty)
-        var paramName = a[0];
-        var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
-  
-        // if the paramName ends with square brackets, e.g., colors[] or colors[2]
-        if (paramName.match(/\[(\d+)?\]$/)) {
-  
-          // create key if it doesn't exist
-          var key = paramName.replace(/\[(\d+)?\]/, '');
-          if (!obj[key]) obj[key] = [];
-  
-          // if it's an indexed array, e.g., colors[2]
-          if (paramName.match(/\[\d+\]$/)) {
-            // get the index value and add the entry at the specified position
-            var index = /\[(\d+)\]/.exec(paramName)[1];
-            obj[key][index] = paramValue;
-          } else {
-            // otherwise, add the value to the end of the array
-            obj[key].push(paramValue);
-          }
-        } else {
-          // handling string parameters
-          if (!obj[paramName]) {
-            // if it doesn't exist, create property
-            obj[paramName] = paramValue;
-          } else if (obj[paramName] && typeof obj[paramName] === 'string'){
-            // if the property exists as a string, convert it to an array
-            obj[paramName] = [obj[paramName]];
-            obj[paramName].push(paramValue);
-          } else {
-            // otherwise, add the property
-            obj[paramName].push(paramValue);
-          }
+
+        // remove stuff after #, as it’s not part of the query string
+        queryString = queryString.split('#')[0];
+
+        // split the query string into component parts
+        var arr = queryString.split('&');
+
+        for (var i = 0; i < arr.length; i++) {
+            // separate the keys and values
+            var a = arr[i].split('=');
+
+            // set parameter name and value (use 'true' if empty)
+            var paramName = a[0];
+            var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
+
+            // if the paramName ends with square brackets, e.g., colors[] or colors[2]
+            if (paramName.match(/\[(\d+)?\]$/)) {
+
+                // create key if it doesn't exist
+                var key = paramName.replace(/\[(\d+)?\]/, '');
+                if (!obj[key]) obj[key] = [];
+
+                // if it's an indexed array, e.g., colors[2]
+                if (paramName.match(/\[\d+\]$/)) {
+                    // get the index value and add the entry at the specified position
+                    var index = /\[(\d+)\]/.exec(paramName)[1];
+                    obj[key][index] = paramValue;
+                } else {
+                    // otherwise, add the value to the end of the array
+                    obj[key].push(paramValue);
+                }
+            } else {
+                // handling string parameters
+                if (!obj[paramName]) {
+                    // if it doesn't exist, create property
+                    obj[paramName] = paramValue;
+                } else if (obj[paramName] && typeof obj[paramName] === 'string') {
+                    // if the property exists as a string, convert it to an array
+                    obj[paramName] = [obj[paramName]];
+                    obj[paramName].push(paramValue);
+                } else {
+                    // otherwise, add the property
+                    obj[paramName].push(paramValue);
+                }
+            }
         }
-      }
     }
-  
+
     return obj;
 }
 
@@ -129,24 +129,24 @@ var sourceData = getAllUrlParams(window.location.href)
 //generate tag and pattern
 
 const arScene = document.querySelector("#ARScene")
-const assets  = document.querySelector("#assets")
+const assets = document.querySelector("#assets")
 
 console.log(arScene)
 console.log(assets)
 
 
-var fatchdataURL = baseUIL+'api/uploads/'
-var patternUrl = fatchdataURL+sourceData.pattern
-var videoUrl = fatchdataURL+sourceData.video
+var fatchdataURL = baseUIL + 'api/uploads/'
+var patternUrl = fatchdataURL + sourceData.pattern
+var videoUrl = fatchdataURL + sourceData.video
 
 
-console.log("Data:  "+sourceData)
-console.log("baseurl:  "+fatchdataURL)
+console.log("Data:  " + sourceData)
+console.log("baseurl:  " + fatchdataURL)
 
-console.log("PatternURL:  "+patternUrl)
-console.log("VideoURL:  "+videoUrl)
+console.log("PatternURL:  " + patternUrl)
+console.log("VideoURL:  " + videoUrl)
 
-       // Set your video source here
+// Set your video source here
 
 // Append the `a-marker` and `a-video` tags with dynamic URL and src
 
@@ -169,17 +169,27 @@ async function loadFiles() {
         const videoBlob = await videoResponse.blob();
         const videoBlobUrl = URL.createObjectURL(videoBlob);
 
-        // Append the marker and video elements to the A-Frame scene
-        $(assets).append(`
-            <video id="dynamic_video_assect" src="${videoBlobUrl}" autoplay="" loop="true"></video>
-          `);
-        
-        $(arScene).append(`
-            <a-marker id="dynamic_marker" type="pattern" url="${markerBlobUrl}" preset="custom" emitevents="true"
-              smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
-              <a-video id="player" src="#dynamic_video_assect" width="1.5" height="1.5" position="0 0 0" rotation="-90 0 0"></a-video>
-            </a-marker>
-          `);
+
+
+        const marker = document.querySelector('#marker');
+        marker.setAttribute('url', markerBlobUrl);
+
+        // Change the source of the existing video
+        const video = document.querySelector('#video_assect');
+        video.setAttribute('src', videoBlobUrl);
+
+
+        // // Append the marker and video elements to the A-Frame scene
+        // $(assets).append(`
+        //     <video id="dynamic_video_assect" src="${videoBlobUrl}" autoplay="" loop="true"></video>
+        //   `);
+
+        // $(arScene).append(`
+        //     <a-marker id="dynamic_marker" type="pattern" url="${markerBlobUrl}" preset="custom" emitevents="true"
+        //       smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
+        //       <a-video id="player" src="#dynamic_video_assect" width="1.5" height="1.5" position="0 0 0" rotation="-90 0 0"></a-video>
+        //     </a-marker>
+        //   `);
 
     } catch (error) {
         console.error("Error loading files:", error);
@@ -215,8 +225,8 @@ loadFiles();
 //     videoAsset.pause();
 //   });
 //download marker
-// download video 
+// download video
 // need marker to be loded
 // need video to be loaded
-// need identify deveice 
+// need identify deveice
 // Invok API
