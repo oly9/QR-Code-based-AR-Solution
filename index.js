@@ -138,7 +138,7 @@ console.log(arScene)
 console.log(assets)
 
 
-var fatchdataURL = baseUIL+'/api/uploads/'
+var fatchdataURL = baseUIL+'api/uploads/'
 var patternUrl = fatchdataURL+sourceData.video
 var videoUrl = fatchdataURL+sourceData.pattern
 
