@@ -46,7 +46,7 @@ window.addEventListener("load", function () {
     // Send the data to the API
     //new cms http://178.128.116.81/cms
     //new cms https://qrgen-tau.vercel.app/api/collect-device-info
-    fetch(baseUIL, {
+    fetch("https://proxy-eqyn.vercel.app/api/proxy", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -139,8 +139,8 @@ console.log(assets)
 
 
 var fatchdataURL = baseUIL+'api/uploads/'
-var patternUrl = fatchdataURL+sourceData.video
-var videoUrl = fatchdataURL+sourceData.pattern
+var patternUrl = fatchdataURL+sourceData.pattern
+var videoUrl = fatchdataURL+sourceData.video
 
 
 console.log("Data:  "+sourceData)
@@ -149,16 +149,19 @@ console.log("baseurl:  "+fatchdataURL)
 console.log("PatternURL:  "+patternUrl)
 console.log("VideoURL:  "+videoUrl)
 
+       // Set your video source here
 
+// Append the `a-marker` and `a-video` tags with dynamic URL and src
+$(assets).append(`
+    <video id="dynamic_video_assect" src="${videoUrl}" autoplay="" loop="true"></video>
+  `);
 
-
-// $("#videoWrapper").append($("<a-marker id='dynamic_marker' type ='pattern' url = './marker-patterns/pattern-dlab-marker.patt' preset='custom' emitevents="true"
-// smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
-// <a-video  id="player" src="#video_assect" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">  </a-video>
-// </a-marker>"));
-
-
-
+$(arScene).append(`
+    <a-marker id="dynamic_marker" type="pattern" url="${patternUrl}" preset="custom" emitevents="true"
+      smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
+      <a-video id="player" src="#dynamic_video_assect" width="1.5" height="1.5" position="0 0 0" rotation="-90 0 0"></a-video>
+    </a-marker>
+  `);
 
 
 
