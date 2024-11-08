@@ -5,7 +5,7 @@ window.addEventListener("click", () => { document.getElementById("video_assect")
 
 
 const scanUI = document.querySelector("#scan-ui")
-const baseUIL = 'http://178.128.116.81/cms/'
+const baseUIL = 'https://178.128.116.81/cms/'
 
 
 const marker = document.querySelector("#marker");
