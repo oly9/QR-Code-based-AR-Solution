@@ -23,7 +23,7 @@
         <a-assets id = "assets">
           <!-- <video id="video" src="video-file.mp4" autoplay="" loop="true"></video> -->
           <video id="video_assect" src="/video/AR-Video-File.mp4" autoplay="" loop="true"></video>
-          <video id="video_assect_server" src="https://178.128.116.81/cms/api/uploads/IbX3YGm/video.mp4" autoplay="" loop="true"></video>
+          <video id="video_assect_server" src="/video/AR-Video-File.mp4" autoplay="" loop="true"></video>
           <!-- <video id="video_assect" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" autoplay="" loop="true"></video> -->
 
         </a-assets>
@@ -33,6 +33,7 @@
                   smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
           <a-video  id="player" src="#video_assect" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">  </a-video>
         </a-marker>
+
         <a-marker id="d_marker" type ='pattern' url = './marker-patterns/marker.patt' preset='custom' emitevents="true"
                   smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
           <a-video  id="player" src="#video_assect_server" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">  </a-video>
