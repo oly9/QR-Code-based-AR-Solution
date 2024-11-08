@@ -126,8 +126,7 @@ function getAllUrlParams(url) {
   }
 
 
-console.log(window.location.href)
-
+console.log(getAllUrlParams(window.location.href))
 
 
 /////////////////////////////////////////////////////////////// NOT IN THE SCOPE  ////////////////////////////////////////
