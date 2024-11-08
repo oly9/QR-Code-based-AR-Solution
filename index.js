@@ -17,14 +17,17 @@ marker.addEventListener("markerLost", () => {
     $(scanUI).show();
     document.getElementById("video_assect").pause();
 });
+
+
+
 const d_marker = document.querySelector("#d_marker");
 d_marker.addEventListener("markerFound", () => {
     $(scanUI).hide();
-    document.getElementById("video_assect").play();
+    document.getElementById("video_assect_server").play();
 });
 d_marker.addEventListener("markerLost", () => {
     $(scanUI).show();
-    document.getElementById("video_assect").pause();
+    document.getElementById("video_assect_server").pause();
 });
 
 ////////////////////////////////////////// API INVOCKING //////////////////////////////////
