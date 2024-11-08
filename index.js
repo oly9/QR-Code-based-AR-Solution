@@ -149,18 +149,45 @@ console.log("VideoURL:  "+videoUrl)
        // Set your video source here
 
 // Append the `a-marker` and `a-video` tags with dynamic URL and src
-$(assets).append(`
-    <video id="dynamic_video_assect" src="${videoUrl}" autoplay="" loop="true"></video>
-  `);
-
-$(arScene).append(`
-    <a-marker id="dynamic_marker" type="pattern" url="${patternUrl}" preset="custom" emitevents="true"
-      smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
-      <a-video id="player" src="#dynamic_video_assect" width="1.5" height="1.5" position="0 0 0" rotation="-90 0 0"></a-video>
-    </a-marker>
-  `);
 
 
+
+// Define the URLs of the marker pattern and video file
+const markerFileUrl = patternUrl;  // Replace with actual marker file URL
+const videoFileUrl = videoUrl;     // Replace with actual video file URL
+
+// Fetch and store both files as Blobs
+async function loadFiles() {
+    try {
+        // Download marker file as Blob
+        const markerResponse = await fetch(markerFileUrl);
+        const markerBlob = await markerResponse.blob();
+        const markerBlobUrl = URL.createObjectURL(markerBlob);
+
+        // Download video file as Blob
+        const videoResponse = await fetch(videoFileUrl);
+        const videoBlob = await videoResponse.blob();
+        const videoBlobUrl = URL.createObjectURL(videoBlob);
+
+        // Append the marker and video elements to the A-Frame scene
+        $(assets).append(`
+            <video id="dynamic_video_assect" src="${videoBlobUrl}" autoplay="" loop="true"></video>
+          `);
+        
+        $(arScene).append(`
+            <a-marker id="dynamic_marker" type="pattern" url="${markerBlobUrl}" preset="custom" emitevents="true"
+              smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
+              <a-video id="player" src="#dynamic_video_assect" width="1.5" height="1.5" position="0 0 0" rotation="-90 0 0"></a-video>
+            </a-marker>
+          `);
+
+    } catch (error) {
+        console.error("Error loading files:", error);
+    }
+}
+
+// Call the function to load and display the files
+loadFiles();
 
 
 
