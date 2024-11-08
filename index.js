@@ -178,29 +178,38 @@ async function loadFiles() {
 
 
 
-        const marker = document.querySelector('#marker');
-        marker.setAttribute('url', markerBlobUrl);
+        // const marker = document.querySelector('#marker');
+        // marker.setAttribute('url', markerBlobUrl);
 
         // Change the source of the existing video
-        const video = document.querySelector('#video_assect');
-        video.setAttribute('src', videoBlobUrl);
+        // const video = document.querySelector('#video_assect');
+        // video.setAttribute('src', videoBlobUrl);
 
-        
-        
+
+
         // Call the rerender function when needed
-        rerenderScene();
+        //rerenderScene();
 
-        // // Append the marker and video elements to the A-Frame scene
-        // $(assets).append(`
-        //     <video id="dynamic_video_assect" src="${videoBlobUrl}" autoplay="" loop="true"></video>
-        //   `);
+        // Append the marker and video elements to the A-Frame scene
+        $(assets).append(`
+            <video id="dynamic_video_assect" src="${videoBlobUrl}" autoplay="" loop="true"></video>
+          `);
 
-        // $(arScene).append(`
-        //     <a-marker id="dynamic_marker" type="pattern" url="${markerBlobUrl}" preset="custom" emitevents="true"
-        //       smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
-        //       <a-video id="player" src="#dynamic_video_assect" width="1.5" height="1.5" position="0 0 0" rotation="-90 0 0"></a-video>
-        //     </a-marker>
-        //   `);
+        $(arScene).append(`
+            <a-marker id="dynamic_marker" type="pattern" url="${markerBlobUrl}" preset="custom" emitevents="true"
+              smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
+              <a-video id="player" src="#dynamic_video_assect" width="1.5" height="1.5" position="0 0 0" rotation="-90 0 0"></a-video>
+            </a-marker>
+          `);
+        const marker_Dynamic = document.querySelector("#dynamic_marker");
+        marker_Dynamic.addEventListener("markerFound", () => {
+            $(scanUI).hide();
+            document.getElementById("dynamic_video_assect").play();
+        });
+        marker_Dynamic.addEventListener("markerLost", () => {
+            $(scanUI).show();
+            document.getElementById("dynamic_video_assect").pause();
+        });
 
     } catch (error) {
         console.error("Error loading files:", error);
