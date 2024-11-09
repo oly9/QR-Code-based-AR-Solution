@@ -49,10 +49,11 @@ console.log(getDeviceType())
 
 window.addEventListener("load", function () {
     const deviceType = getDeviceType();
+    
 
     // Data to send to the API
     const data = {
-        id: "kX3Onnj", // replace this with a dynamic user or session ID if needed
+        id: "IbX3YGm", // replace this with a dynamic user or session ID if needed
         deviceName: deviceType
     };
 
