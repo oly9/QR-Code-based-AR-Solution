@@ -12,14 +12,19 @@ var fatchdataURL = baseUIL + 'api/uploads/'
 
 
 const marker = document.querySelector("#marker");
-marker.addEventListener("markerFound", () => {
-    $(scanUI).hide();
-    document.getElementById("video_assect").play();
-});
-marker.addEventListener("markerLost", () => {
-    $(scanUI).show();
-    document.getElementById("video_assect").pause();
-});
+if(marker != null)
+    {
+        marker.addEventListener("markerFound", () => {
+            $(scanUI).hide();
+            document.getElementById("video_assect").play();
+        });
+        marker.addEventListener("markerLost", () => {
+            $(scanUI).show();
+            document.getElementById("video_assect").pause();
+        });
+
+    }
+
 
 ////////////////////////////////////////// API INVOCKING //////////////////////////////////
 
@@ -31,15 +36,23 @@ const urlObj = new URL(window.location.href);
 const videoParam = urlObj.searchParams.get("video");
 const patternParam = urlObj.searchParams.get("pattern");
 
+//https://178.128.116.81/cms/api/uploads/IbX3YGm/marker.patt
+//https://178.128.116.81/cms/api/uploads/IbX3YGm/video.mp4
+
 console.log("Video:", videoParam)
 
 
-var patternUrl = fatchdataURL + patternParam
-var videoUrl = fatchdataURL + videoParam
-
-const words = patternParam.split('/');
-const id = words[0]
-console.log("ID: "+id)
+var patternUrl = fatchdataURL + "IbX3YGm/marker.patt";
+var videoUrl = fatchdataURL + "IbX3YGm/video.mp4";
+var id = "IbX3YGm" ;
+if(patternParam != null)
+    {
+        patternUrl = fatchdataURL + patternParam;
+        videoUrl = fatchdataURL + videoParam;
+        const words = patternParam.split('/');
+        id = words[0]
+        console.log("ID: "+id)
+    }
 
 function getDeviceType() {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -89,16 +102,15 @@ window.addEventListener("load", function () {
 
 //generate tag and pattern
 
-const arScene = document.querySelector("#ARScene")
-const assets = document.querySelector("#assets")
+// const arScene = document.querySelector("#ARScene")
+// const assets = document.querySelector("#assets")
 
-console.log(arScene)
-console.log(assets)
-
-
+// console.log(arScene)
+// console.log(assets)
 
 
-console.log("Data:  " + words[0])
+
+
 
 //console.log("Data:  " + sourceData)
 console.log("baseurl:  " + fatchdataURL)
@@ -109,14 +121,7 @@ console.log("VideoURL:  " + videoUrl)
 // Set your video source here
 
 // Append the `a-marker` and `a-video` tags with dynamic URL and src
-function rerenderScene() {
-    const scene = document.querySelector('a-scene');
 
-    if (scene && scene.hasLoaded) {
-        // Trigger a reload on all components
-        scene.emit('reloaded');
-    }
-}
 
 
 // Define the URLs of the marker pattern and video file
@@ -126,18 +131,21 @@ const videoFileUrl = videoUrl;     // Replace with actual video file URL
 
 
 function dynamicMarker(){
-    
-        // Append the marker and video elements to the A-Frame scene
-        $(assets).append(`
-            <video id="dynamic_video_assect" src="${videoFileUrl}" autoplay="" loop="true"></video>
-          `);
+    $("body").append(`<a-scene id="ARScene" embedded arjs='sourceType: webcam; debugUIEnabled: false' vr-mode-ui='enabled: false'>
 
-        $(arScene).append(`
-            <a-marker id="dynamic_marker" type="pattern" url="${markerFileUrl}" preset="custom" emitevents="true"
-              smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
-              <a-video id="player" src="#dynamic_video_assect" width="1.5" height="1.5" position="0 0 0" rotation="-90 0 0"></a-video>
-            </a-marker>
-          `);
+        <a-assets id = "assets">
+          <video id="dynamic_marker" src="${videoFileUrl}" autoplay="" loop="true"></video>
+        </a-assets>
+
+        <!--a-marker preset="hiro" emitevents="true" id="marker"-->
+        <a-marker id="marker" type ='pattern' url = '${markerFileUrl}' preset='custom' emitevents="true"
+                  smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
+          <a-video  id="player" src="#dynamic_marker" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">  </a-video>
+        </a-marker>   
+        <!-- add a simple camera -->
+        <a-entity camera></a-entity>
+      </a-scene>`)
+      
         const marker_Dynamic = document.querySelector("#dynamic_marker");
         marker_Dynamic.addEventListener("markerFound", () => {
             $(scanUI).hide();
