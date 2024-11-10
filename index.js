@@ -8,6 +8,8 @@ window.addEventListener("click", () => { document.getElementById("video_assect")
 const scanUI = document.querySelector("#scan-ui")
 const baseUIL = 'https://178.128.116.81/cms/'
 
+var fatchdataURL = baseUIL + 'api/uploads/'
+
 
 const marker = document.querySelector("#marker");
 marker.addEventListener("markerFound", () => {
@@ -168,7 +170,6 @@ console.log(arScene)
 console.log(assets)
 
 
-var fatchdataURL = baseUIL + 'api/uploads/'
 
 
 console.log("Data:  " + words[0])
