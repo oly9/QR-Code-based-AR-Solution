@@ -2,7 +2,7 @@
 
 //console.log(videoplayer)
 window.addEventListener("click", () => { document.getElementById("video_assect").play(); })
-window.addEventListener("click", () => { document.getElementById("video_assect_server").play(); })
+//window.addEventListener("click", () => { document.getElementById("video_assect_server").play(); })
 
 
 const scanUI = document.querySelector("#scan-ui")
