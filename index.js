@@ -110,6 +110,7 @@ var patternUrl = fatchdataURL + patternParam
 var videoUrl = fatchdataURL + videoParam
 
 const words = patternParam.split('/');
+const id = words[0]
 console.log("ID: "+words[0])
 
 function getDeviceType() {
@@ -134,7 +135,7 @@ window.addEventListener("load", function () {
 
     // Data to send to the API
     const data = {
-        id: "IbX3YGm", // replace this with a dynamic user or session ID if needed
+        id: id,//"IbX3YGm", // replace this with a dynamic user or session ID if needed
         deviceName: deviceType
     };
 
@@ -156,7 +157,7 @@ window.addEventListener("load", function () {
 
 
 
-console.log(getAllUrlParams(window.location.href))
+//console.log(getAllUrlParams(window.location.href))
 
 //generate tag and pattern
 
