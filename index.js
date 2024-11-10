@@ -1,33 +1,34 @@
 //const videoplayer = document.getElementById("assets")
 
 //console.log(videoplayer)
-window.addEventListener("click", () => { document.getElementById("video_assect").play(); })
+//window.addEventListener("click", () => { document.getElementById("video_assect").play(); })
 //window.addEventListener("click", () => { document.getElementById("video_assect_server").play(); })
 
 
-const scanUI = document.querySelector("#scan-ui")
-const baseUIL = 'https://178.128.116.81/cms/'
-
-var fatchdataURL = baseUIL + 'api/uploads/'
 
 
-const marker = document.querySelector("#marker");
-if(marker != null)
-    {
-        marker.addEventListener("markerFound", () => {
-            $(scanUI).hide();
-            document.getElementById("video_assect").play();
-        });
-        marker.addEventListener("markerLost", () => {
-            $(scanUI).show();
-            document.getElementById("video_assect").pause();
-        });
+// const marker = document.querySelector("#marker");
+// if(marker != null)
+//     {
+//         marker.addEventListener("markerFound", () => {
+//             $(scanUI).hide();
+//             document.getElementById("video_assect").play();
+//         });
+//         marker.addEventListener("markerLost", () => {
+//             $(scanUI).show();
+//             document.getElementById("video_assect").pause();
+//         });
 
-    }
+//     }
 
 
 ////////////////////////////////////////// API INVOCKING //////////////////////////////////
 
+
+const scanUI = document.querySelector("#scan-ui");
+const baseUIL = 'https://178.128.116.81/cms/';
+
+var fatchdataURL = baseUIL + 'api/uploads/';
 
 // Create a URL object
 const urlObj = new URL(window.location.href);
@@ -44,15 +45,23 @@ console.log("Video:", videoParam)
 
 var patternUrl = fatchdataURL + "IbX3YGm/marker.patt";
 var videoUrl = fatchdataURL + "IbX3YGm/video.mp4";
-var id = "IbX3YGm" ;
-if(patternParam != null)
-    {
-        patternUrl = fatchdataURL + patternParam;
-        videoUrl = fatchdataURL + videoParam;
-        const words = patternParam.split('/');
-        id = words[0]
-        console.log("ID: "+id)
-    }
+var id = "IbX3YGm";
+
+if (patternParam != null) {
+
+    console.log("PatternChaned")
+
+    patternUrl = fatchdataURL + patternParam;
+    videoUrl = fatchdataURL + videoParam;
+    const words = patternParam.split('/');
+    id = words[0]
+    console.log("ID: " + id)
+}
+
+console.log("baseurl:  " + fatchdataURL)
+
+console.log("PatternURL:  " + patternUrl)
+console.log("VideoURL:  " + videoUrl)
 
 function getDeviceType() {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -70,30 +79,6 @@ console.log(getDeviceType())
 
 
 
-window.addEventListener("load", function () {
-    const deviceType = getDeviceType();
-    
-
-    // Data to send to the API
-    const data = {
-        id: id,                //"IbX3YGm", // replace this with a dynamic user or session ID if needed
-        deviceName: deviceType
-    };
-
-    // Send the data to the API
-    //new cms http://178.128.116.81/cms
-    //new cms https://qrgen-tau.vercel.app/api/collect-device-info
-    fetch("https://proxy-eqyn.vercel.app/api/proxy", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => response.json())
-        .then(data => console.log("Device info sent:", data))
-        .catch(error => console.error("Error sending device info:", error));
-});
 
 
 ////////////////////////////////////////////// adding dynamic /////////////////////////////////////////////
@@ -113,10 +98,6 @@ window.addEventListener("load", function () {
 
 
 //console.log("Data:  " + sourceData)
-console.log("baseurl:  " + fatchdataURL)
-
-console.log("PatternURL:  " + patternUrl)
-console.log("VideoURL:  " + videoUrl)
 
 // Set your video source here
 
@@ -130,7 +111,7 @@ const videoFileUrl = videoUrl;     // Replace with actual video file URL
 
 
 
-function dynamicMarker(){
+function dynamicMarker() {
     $("body").append(`<a-scene id="ARScene" embedded arjs='sourceType: webcam; debugUIEnabled: false' vr-mode-ui='enabled: false'>
 
         <a-assets id = "assets">
@@ -145,18 +126,45 @@ function dynamicMarker(){
         <!-- add a simple camera -->
         <a-entity camera></a-entity>
       </a-scene>`)
-      
-        const marker_Dynamic = document.querySelector("#dynamic_marker");
-        marker_Dynamic.addEventListener("markerFound", () => {
-            $(scanUI).hide();
-            document.getElementById("dynamic_video_assect").play();
-        });
-        marker_Dynamic.addEventListener("markerLost", () => {
-            $(scanUI).show();
-            document.getElementById("dynamic_video_assect").pause();
-        });
-        
-        window.addEventListener("click", () => { document.getElementById("dynamic_video_assect").play(); })
+
+    const marker_Dynamic = document.querySelector("#dynamic_marker");
+    marker_Dynamic.addEventListener("markerFound", () => {
+        $(scanUI).hide();
+        document.getElementById("dynamic_video_assect").play();
+    });
+    marker_Dynamic.addEventListener("markerLost", () => {
+        $(scanUI).show();
+        document.getElementById("dynamic_video_assect").pause();
+    });
+
+    window.addEventListener("click", () => { document.getElementById("dynamic_video_assect").play(); })
+
+
+
+    window.addEventListener("load", function () {
+        const deviceType = getDeviceType();
+
+
+        // Data to send to the API
+        const data = {
+            id: id,                //"IbX3YGm", // replace this with a dynamic user or session ID if needed
+            deviceName: deviceType
+        };
+
+        // Send the data to the API
+        //new cms http://178.128.116.81/cms
+        //new cms https://qrgen-tau.vercel.app/api/collect-device-info
+        fetch("https://proxy-eqyn.vercel.app/api/proxy", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => console.log("Device info sent:", data))
+            .catch(error => console.error("Error sending device info:", error));
+    });
 }
 
 dynamicMarker()
@@ -194,18 +202,18 @@ async function loadFiles() {
             <!-- add a simple camera -->
             <a-entity camera></a-entity>
           </a-scene>`)
-          
-            const marker_Dynamic = document.querySelector("#dynamic_marker");
-            marker_Dynamic.addEventListener("markerFound", () => {
-                $(scanUI).hide();
-                document.getElementById("dynamic_video_assect").play();
-            });
-            marker_Dynamic.addEventListener("markerLost", () => {
-                $(scanUI).show();
-                document.getElementById("dynamic_video_assect").pause();
-            });
-            
-            window.addEventListener("click", () => { document.getElementById("dynamic_video_assect").play(); })
+
+        const marker_Dynamic = document.querySelector("#dynamic_marker");
+        marker_Dynamic.addEventListener("markerFound", () => {
+            $(scanUI).hide();
+            document.getElementById("dynamic_video_assect").play();
+        });
+        marker_Dynamic.addEventListener("markerLost", () => {
+            $(scanUI).show();
+            document.getElementById("dynamic_video_assect").pause();
+        });
+
+        window.addEventListener("click", () => { document.getElementById("dynamic_video_assect").play(); })
 
     } catch (error) {
         console.error("Error loading files:", error);
