@@ -183,7 +183,7 @@ async function loadFiles() {
         $("body").append(`<a-scene id="ARScene" embedded arjs='sourceType: webcam; debugUIEnabled: false' vr-mode-ui='enabled: false'>
 
             <a-assets id = "assets">
-              <video id="dynamic_marker" src="${videoBlobUrl}" autoplay="" loop="true"></video>
+              <video id="dynamic_marker" src="${videoBlobUrl}" autoplay="" loop="true" crossorigin="anonymous"></video>
             </a-assets>
     
             <!--a-marker preset="hiro" emitevents="true" id="marker"-->
