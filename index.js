@@ -138,10 +138,6 @@ function dynamicMarker() {
     });
 
     window.addEventListener("click", () => { document.getElementById("dynamic_marker").play(); })
-
-
-
-    
 }
 
 dynamicMarker()
