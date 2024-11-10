@@ -147,6 +147,8 @@ function dynamicMarker(){
             $(scanUI).show();
             document.getElementById("dynamic_video_assect").pause();
         });
+        
+        window.addEventListener("click", () => { document.getElementById("dynamic_video_assect").play(); })
 }
 
 dynamicMarker()
