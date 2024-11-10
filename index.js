@@ -114,15 +114,20 @@ const videoFileUrl = videoUrl;     // Replace with actual video file URL
 function dynamicMarker() {
     $("body").append(`<a-scene id="ARScene" embedded arjs='sourceType: webcam; debugUIEnabled: false' vr-mode-ui='enabled: false'>
 
-        <a-assets id = "assets">
+        <a-assets id = "assets" timeout="300000">
           <video id="dynamic_marker" src="${videoFileUrl}" autoplay="" loop="true" crossorigin="anonymous"></video>
         </a-assets>
 
         <!--a-marker preset="hiro" emitevents="true" id="marker"-->
-        <a-marker id="marker" type ='pattern' url = '${markerFileUrl}' preset='custom' emitevents="true"
+        <a-marker-camera id="marker" type="pattern" url="${markerFileUrl}" preset="custom" emitevents="true"
+                 smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
+        <a-video id="player" src="#dynamic_marker" width="1.5" height="1.5" position="0 0 0" rotation="-90 0 0"></a-video>
+        </a-marker-camera>
+
+        <!--<a-marker id="marker" type ='pattern' url = '${markerFileUrl}' preset='custom' emitevents="true"
                   smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
           <a-video  id="player" src="#dynamic_marker" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">  </a-video>
-        </a-marker>   
+        </a-marker>   -->
         <!-- add a simple camera -->
         <a-entity camera></a-entity>
       </a-scene>`)
