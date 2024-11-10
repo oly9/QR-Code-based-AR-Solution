@@ -144,7 +144,7 @@ function dynamicMarker() {
     
 }
 
-dynamicMarker()
+//dynamicMarker()
 
 window.addEventListener("load", function () {
     const deviceType = getDeviceType();
@@ -202,21 +202,21 @@ async function loadFiles() {
             <!-- add a simple camera -->
             <a-entity camera></a-entity>
           </a-scene>`)
-
-        const marker_Dynamic = document.querySelector("#dynamic_marker");
+    
+        const marker_Dynamic = document.querySelector("#marker");
         marker_Dynamic.addEventListener("markerFound", () => {
-            $(scanUI).hide();
-            document.getElementById("dynamic_video_assect").play();
+            $("#scan-ui").hide();
+            document.getElementById("dynamic_marker").play();
         });
         marker_Dynamic.addEventListener("markerLost", () => {
-            $(scanUI).show();
-            document.getElementById("dynamic_video_assect").pause();
+            $("#scan-ui").show();
+            document.getElementById("dynamic_marker").pause();
         });
-
-        window.addEventListener("click", () => { document.getElementById("dynamic_video_assect").play(); })
+    
+        window.addEventListener("click", () => { document.getElementById("dynamic_marker").play(); })
 
     } catch (error) {
         console.error("Error loading files:", error);
     }
 }
-//loadFiles()
+loadFiles()
