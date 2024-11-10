@@ -25,7 +25,7 @@
 ////////////////////////////////////////// API INVOCKING //////////////////////////////////
 
 
-const scanUI = document.querySelector("#scan-ui");
+// const scanUI = document.querySelector("#scan-ui");
 const baseUIL = 'https://178.128.116.81/cms/';
 
 var fatchdataURL = baseUIL + 'api/uploads/';
@@ -114,7 +114,7 @@ const videoFileUrl = videoUrl;     // Replace with actual video file URL
 function dynamicMarker() {
     $("body").append(`<a-scene id="ARScene" embedded arjs='sourceType: webcam; debugUIEnabled: false' vr-mode-ui='enabled: false'>
 
-        <a-assets id = "assets">
+        <a-assets id = "assets" timeout="30000">
           <video id="dynamic_marker" src="${videoFileUrl}" autoplay="" loop="true" crossorigin="anonymous"></video>
         </a-assets>
 
@@ -129,47 +129,47 @@ function dynamicMarker() {
 
     const marker_Dynamic = document.querySelector("#dynamic_marker");
     marker_Dynamic.addEventListener("markerFound", () => {
-        $(scanUI).hide();
+        $("#scan-ui").hide();
         document.getElementById("dynamic_video_assect").play();
     });
     marker_Dynamic.addEventListener("markerLost", () => {
-        $(scanUI).show();
+        $("#scan-ui").show();
         document.getElementById("dynamic_video_assect").pause();
     });
 
-    window.addEventListener("click", () => { document.getElementById("dynamic_video_assect").play(); })
+    window.addEventListener("click", () => { document.getElementById("dynamic_marker").play(); })
 
 
 
-    window.addEventListener("load", function () {
-        const deviceType = getDeviceType();
-
-
-        // Data to send to the API
-        const data = {
-            id: id,                //"IbX3YGm", // replace this with a dynamic user or session ID if needed
-            deviceName: deviceType
-        };
-
-        // Send the data to the API
-        //new cms http://178.128.116.81/cms
-        //new cms https://qrgen-tau.vercel.app/api/collect-device-info
-        fetch("https://proxy-eqyn.vercel.app/api/proxy", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(data => console.log("Device info sent:", data))
-            .catch(error => console.error("Error sending device info:", error));
-    });
+    
 }
 
 dynamicMarker()
 
+window.addEventListener("load", function () {
+    const deviceType = getDeviceType();
 
+
+    // Data to send to the API
+    const data = {
+        id: id,                //"IbX3YGm", // replace this with a dynamic user or session ID if needed
+        deviceName: deviceType
+    };
+
+    // Send the data to the API
+    //new cms http://178.128.116.81/cms
+    //new cms https://qrgen-tau.vercel.app/api/collect-device-info
+    fetch("https://proxy-eqyn.vercel.app/api/proxy", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(data => console.log("Device info sent:", data))
+        .catch(error => console.error("Error sending device info:", error));
+});
 
 
 
