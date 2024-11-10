@@ -34,75 +34,82 @@ marker.addEventListener("markerLost", () => {
 ////////////////////////////////////////// API INVOCKING //////////////////////////////////
 
 
+// Create a URL object
+const urlObj = new URL(window.location.href);
 
+// Extract the parameters
+const videoParam = urlObj.searchParams.get("video");
+const patternParam = urlObj.searchParams.get("pattern");
 
-function getAllUrlParams(url) {
+console.log("Video:", videoParam)
 
-    // get query string from url (optional) or window
-    var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+// function getAllUrlParams(url) {
 
-    // we'll store the parameters here
-    var obj = {};
+//     // get query string from url (optional) or window
+//     var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
 
-    // if query string exists
-    if (queryString) {
+//     // we'll store the parameters here
+//     var obj = {};
 
-        // remove stuff after #, as it’s not part of the query string
-        queryString = queryString.split('#')[0];
+//     // if query string exists
+//     if (queryString) {
 
-        // split the query string into component parts
-        var arr = queryString.split('&');
+//         // remove stuff after #, as it’s not part of the query string
+//         queryString = queryString.split('#')[0];
 
-        for (var i = 0; i < arr.length; i++) {
-            // separate the keys and values
-            var a = arr[i].split('=');
+//         // split the query string into component parts
+//         var arr = queryString.split('&');
 
-            // set parameter name and value (use 'true' if empty)
-            var paramName = a[0];
-            var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
+//         for (var i = 0; i < arr.length; i++) {
+//             // separate the keys and values
+//             var a = arr[i].split('=');
 
-            // if the paramName ends with square brackets, e.g., colors[] or colors[2]
-            if (paramName.match(/\[(\d+)?\]$/)) {
+//             // set parameter name and value (use 'true' if empty)
+//             var paramName = a[0];
+//             var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
 
-                // create key if it doesn't exist
-                var key = paramName.replace(/\[(\d+)?\]/, '');
-                if (!obj[key]) obj[key] = [];
+//             // if the paramName ends with square brackets, e.g., colors[] or colors[2]
+//             if (paramName.match(/\[(\d+)?\]$/)) {
 
-                // if it's an indexed array, e.g., colors[2]
-                if (paramName.match(/\[\d+\]$/)) {
-                    // get the index value and add the entry at the specified position
-                    var index = /\[(\d+)\]/.exec(paramName)[1];
-                    obj[key][index] = paramValue;
-                } else {
-                    // otherwise, add the value to the end of the array
-                    obj[key].push(paramValue);
-                }
-            } else {
-                // handling string parameters
-                if (!obj[paramName]) {
-                    // if it doesn't exist, create property
-                    obj[paramName] = paramValue;
-                } else if (obj[paramName] && typeof obj[paramName] === 'string') {
-                    // if the property exists as a string, convert it to an array
-                    obj[paramName] = [obj[paramName]];
-                    obj[paramName].push(paramValue);
-                } else {
-                    // otherwise, add the property
-                    obj[paramName].push(paramValue);
-                }
-            }
-        }
-    }
+//                 // create key if it doesn't exist
+//                 var key = paramName.replace(/\[(\d+)?\]/, '');
+//                 if (!obj[key]) obj[key] = [];
 
-    return obj;
-}
+//                 // if it's an indexed array, e.g., colors[2]
+//                 if (paramName.match(/\[\d+\]$/)) {
+//                     // get the index value and add the entry at the specified position
+//                     var index = /\[(\d+)\]/.exec(paramName)[1];
+//                     obj[key][index] = paramValue;
+//                 } else {
+//                     // otherwise, add the value to the end of the array
+//                     obj[key].push(paramValue);
+//                 }
+//             } else {
+//                 // handling string parameters
+//                 if (!obj[paramName]) {
+//                     // if it doesn't exist, create property
+//                     obj[paramName] = paramValue;
+//                 } else if (obj[paramName] && typeof obj[paramName] === 'string') {
+//                     // if the property exists as a string, convert it to an array
+//                     obj[paramName] = [obj[paramName]];
+//                     obj[paramName].push(paramValue);
+//                 } else {
+//                     // otherwise, add the property
+//                     obj[paramName].push(paramValue);
+//                 }
+//             }
+//         }
+//     }
 
-var sourceData = getAllUrlParams(window.location.href)
+//     return obj;
+// }
 
-var patternUrl = fatchdataURL + sourceData.pattern
-var videoUrl = fatchdataURL + sourceData.video
+//var sourceData = getAllUrlParams(window.location.href)
 
-const words = videoUrl.split('/');
+var patternUrl = fatchdataURL + patternParam
+var videoUrl = fatchdataURL + videoParam
+
+const words = patternParam.split('/');
 console.log("ID: "+words[0])
 
 function getDeviceType() {
@@ -165,7 +172,7 @@ var fatchdataURL = baseUIL + 'api/uploads/'
 
 console.log("Data:  " + words[0])
 
-console.log("Data:  " + sourceData)
+//console.log("Data:  " + sourceData)
 console.log("baseurl:  " + fatchdataURL)
 
 console.log("PatternURL:  " + patternUrl)
