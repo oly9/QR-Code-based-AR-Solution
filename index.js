@@ -190,7 +190,7 @@ async function loadFiles() {
         // Append the marker and video elements to the A-Frame scene
         $("body").append(`<a-scene id="ARScene" embedded arjs='sourceType: webcam; debugUIEnabled: false' vr-mode-ui='enabled: false'>
 
-            <a-assets id = "assets">
+            <a-assets id = "assets" timeout="30000">
               <video id="dynamic_marker" src="${videoBlobUrl}" autoplay="" loop="true" crossorigin="anonymous"></video>
             </a-assets>
     
