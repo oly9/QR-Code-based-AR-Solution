@@ -127,14 +127,14 @@ function dynamicMarker() {
         <a-entity camera></a-entity>
       </a-scene>`)
 
-    const marker_Dynamic = document.querySelector("#dynamic_marker");
+    const marker_Dynamic = document.querySelector("#marker");
     marker_Dynamic.addEventListener("markerFound", () => {
         $("#scan-ui").hide();
-        document.getElementById("dynamic_video_assect").play();
+        document.getElementById("dynamic_marker").play();
     });
     marker_Dynamic.addEventListener("markerLost", () => {
         $("#scan-ui").show();
-        document.getElementById("dynamic_video_assect").pause();
+        document.getElementById("dynamic_marker").pause();
     });
 
     window.addEventListener("click", () => { document.getElementById("dynamic_marker").play(); })
