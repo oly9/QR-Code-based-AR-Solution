@@ -144,7 +144,7 @@ function dynamicMarker() {
     
 }
 
-//dynamicMarker()
+dynamicMarker()
 
 window.addEventListener("load", function () {
     const deviceType = getDeviceType();
@@ -219,4 +219,4 @@ async function loadFiles() {
         console.error("Error loading files:", error);
     }
 }
-loadFiles()
+//loadFiles()
