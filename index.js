@@ -134,7 +134,7 @@ function dynamicMarker(){
     $("body").append(`<a-scene id="ARScene" embedded arjs='sourceType: webcam; debugUIEnabled: false' vr-mode-ui='enabled: false'>
 
         <a-assets id = "assets">
-          <video id="dynamic_marker" src="${videoFileUrl}" autoplay="" loop="true"></video>
+          <video id="dynamic_marker" src="${videoFileUrl}" autoplay="" loop="true" crossorigin="anonymous"></video>
         </a-assets>
 
         <!--a-marker preset="hiro" emitevents="true" id="marker"-->
@@ -159,7 +159,7 @@ function dynamicMarker(){
         window.addEventListener("click", () => { document.getElementById("dynamic_video_assect").play(); })
 }
 
-//dynamicMarker()
+dynamicMarker()
 
 
 
@@ -211,4 +211,4 @@ async function loadFiles() {
         console.error("Error loading files:", error);
     }
 }
-loadFiles()
+//loadFiles()
