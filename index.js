@@ -1,26 +1,38 @@
 //const videoplayer = document.getElementById("assets")
 
 //console.log(videoplayer)
-//window.addEventListener("click", () => { document.getElementById("video_assect").play(); })
-//window.addEventListener("click", () => { document.getElementById("video_assect_server").play(); })
+window.addEventListener("click", () => { document.getElementById("video_assect1").play(); })
+window.addEventListener("click", () => { document.getElementById("video_assect2").play(); })
 
 
 
 
-// const marker = document.querySelector("#marker");
-// if(marker != null)
-//     {
-//         marker.addEventListener("markerFound", () => {
-//             $(scanUI).hide();
-//             document.getElementById("video_assect").play();
-//         });
-//         marker.addEventListener("markerLost", () => {
-//             $(scanUI).show();
-//             document.getElementById("video_assect").pause();
-//         });
+const marker = document.querySelector("#marker");
+if(marker != null)
+    {
+        marker.addEventListener("markerFound", () => {
+            $("#scan-ui").hide();
+            document.getElementById("video_assect1").play();
+        });
+        marker.addEventListener("markerLost", () => {
+            $("#scan-ui").show();
+            document.getElementById("video_assect1").pause();
+        });
 
-//     }
-
+    }
+    const marker2 = document.querySelector("#d_marker");
+    if(marker != null)
+        {
+            marker2.addEventListener("markerFound", () => {
+                $("#scan-ui").hide();
+                document.getElementById("video_assect2").play();
+            });
+            marker2.addEventListener("markerLost", () => {
+                $("#scan-ui").show();
+                document.getElementById("video_assect2").pause();
+            });
+    
+        }
 
 ////////////////////////////////////////// API INVOCKING //////////////////////////////////
 
@@ -80,6 +92,30 @@ console.log(getDeviceType())
 
 
 
+window.addEventListener("load", function () {
+    const deviceType = getDeviceType();
+
+
+    // Data to send to the API
+    const data = {
+        id: id,                //"IbX3YGm", // replace this with a dynamic user or session ID if needed
+        deviceName: deviceType
+    };
+
+    // Send the data to the API
+    //new cms http://178.128.116.81/cms
+    //new cms https://qrgen-tau.vercel.app/api/collect-device-info
+    fetch("https://proxy-eqyn.vercel.app/api/proxy", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(data => console.log("Device info sent:", data))
+        .catch(error => console.error("Error sending device info:", error));
+});
 
 ////////////////////////////////////////////// adding dynamic /////////////////////////////////////////////
 
@@ -140,32 +176,8 @@ function dynamicMarker() {
     window.addEventListener("click", () => { document.getElementById("dynamic_marker").play(); })
 }
 
-dynamicMarker()
+//dynamicMarker()
 
-window.addEventListener("load", function () {
-    const deviceType = getDeviceType();
-
-
-    // Data to send to the API
-    const data = {
-        id: id,                //"IbX3YGm", // replace this with a dynamic user or session ID if needed
-        deviceName: deviceType
-    };
-
-    // Send the data to the API
-    //new cms http://178.128.116.81/cms
-    //new cms https://qrgen-tau.vercel.app/api/collect-device-info
-    fetch("https://proxy-eqyn.vercel.app/api/proxy", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => response.json())
-        .then(data => console.log("Device info sent:", data))
-        .catch(error => console.error("Error sending device info:", error));
-});
 
 
 
