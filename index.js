@@ -159,7 +159,7 @@ function dynamicMarker(){
         window.addEventListener("click", () => { document.getElementById("dynamic_video_assect").play(); })
 }
 
-dynamicMarker()
+//dynamicMarker()
 
 
 
@@ -170,9 +170,9 @@ dynamicMarker()
 async function loadFiles() {
     try {
         // Download marker file as Blob
-        const markerResponse = await fetch(markerFileUrl);
-        const markerBlob = await markerResponse.blob();
-        const markerBlobUrl = URL.createObjectURL(markerBlob);
+        // const markerResponse = await fetch(markerFileUrl);
+        // const markerBlob = await markerResponse.blob();
+        // const markerBlobUrl = URL.createObjectURL(markerBlob);
 
         // Download video file as Blob
         const videoResponse = await fetch(videoFileUrl);
@@ -180,27 +180,35 @@ async function loadFiles() {
         const videoBlobUrl = URL.createObjectURL(videoBlob);
 
         // Append the marker and video elements to the A-Frame scene
-        $(assets).append(`
-            <video id="dynamic_video_assect" src="${videoBlobUrl}" autoplay="" loop="true"></video>
-          `);
+        $("body").append(`<a-scene id="ARScene" embedded arjs='sourceType: webcam; debugUIEnabled: false' vr-mode-ui='enabled: false'>
 
-        $(arScene).append(`
-            <a-marker id="dynamic_marker" type="pattern" url="${markerBlobUrl}" preset="custom" emitevents="true"
-              smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
-              <a-video id="player" src="#dynamic_video_assect" width="1.5" height="1.5" position="0 0 0" rotation="-90 0 0"></a-video>
-            </a-marker>
-          `);
-        const marker_Dynamic = document.querySelector("#dynamic_marker");
-        marker_Dynamic.addEventListener("markerFound", () => {
-            $(scanUI).hide();
-            document.getElementById("dynamic_video_assect").play();
-        });
-        marker_Dynamic.addEventListener("markerLost", () => {
-            $(scanUI).show();
-            document.getElementById("dynamic_video_assect").pause();
-        });
+            <a-assets id = "assets">
+              <video id="dynamic_marker" src="${videoBlobUrl}" autoplay="" loop="true"></video>
+            </a-assets>
+    
+            <!--a-marker preset="hiro" emitevents="true" id="marker"-->
+            <a-marker id="marker" type ='pattern' url = '${markerFileUrl}' preset='custom' emitevents="true"
+                      smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
+              <a-video  id="player" src="#dynamic_marker" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">  </a-video>
+            </a-marker>   
+            <!-- add a simple camera -->
+            <a-entity camera></a-entity>
+          </a-scene>`)
+          
+            const marker_Dynamic = document.querySelector("#dynamic_marker");
+            marker_Dynamic.addEventListener("markerFound", () => {
+                $(scanUI).hide();
+                document.getElementById("dynamic_video_assect").play();
+            });
+            marker_Dynamic.addEventListener("markerLost", () => {
+                $(scanUI).show();
+                document.getElementById("dynamic_video_assect").pause();
+            });
+            
+            window.addEventListener("click", () => { document.getElementById("dynamic_video_assect").play(); })
 
     } catch (error) {
         console.error("Error loading files:", error);
     }
 }
+loadFiles()
