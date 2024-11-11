@@ -65,7 +65,7 @@ if (getDeviceType() === "ios") {
     //         console.log("Button clicked");
     //         this.hide();
     //         video.play();
-            
+
     //     });
     // }
     // else {
@@ -74,17 +74,17 @@ if (getDeviceType() === "ios") {
     //         console.log("Button clicked");
     //         this.hide();
     //         video.play();
-            
+
     //     })
 
     // }
-    $("#playButton").click(function (e) { 
-                console.log("Button clicked");
-                this.hide();
-                //video.play();
-            })
+    $("#playButton").click(function (e) {
+        console.log("Button clicked");
+        this.hide();
+        //video.play();
+    })
 }
-else{
+else {
     $("#playButton").hide()
 }
 console.log(getDeviceType())
@@ -139,10 +139,9 @@ if (marker != null) {
     });
     marker.addEventListener("markerLost", () => {
         $("#scan-ui").show();
-        if(getDeviceType() ==="ios")
-            {
-                $("#playButton").hide();
-            }
+        if (getDeviceType() === "ios") {
+            $("#playButton").hide();
+        }
         document.getElementById("video_assect1").pause();
     });
 
@@ -155,14 +154,85 @@ if (marker != null) {
     });
     marker2.addEventListener("markerLost", () => {
         $("#scan-ui").show();
-        if(getDeviceType() ==="ios")
-            {
-                $("#playButton").hide();
-            }
+        if (getDeviceType() === "ios") {
+            $("#playButton").hide();
+        }
         document.getElementById("video_assect2").pause();
     });
 
 }
+
+
+
+
+
+var markerFound = 0;
+AFRAME.registerComponent('button', {
+    init: function () {
+        //var elem = document.documentElement;
+        var marker = document.querySelector("#marker");
+        //var fullbutton = document.querySelector("#fullscreen");
+        var Video_0 = document.querySelector("#video_assect1");
+        var button = document.querySelector("#mutebutton");
+        button.hidden = true;
+        Video_0.pause();
+
+        marker.addEventListener("markerFound", function (evt) {
+            markerFound = 1;
+            button.hidden = false;
+            //Video_0.play();  //if video should start immediently on marker detection
+        });
+
+        marker.addEventListener("markerLost", function (evt) {
+            markerFound = 0;
+            Video_0.pause();
+            button.hidden = true;
+        });
+
+        button.addEventListener("click", function (evt) {
+            console.log("button clicked")
+            if (Video_0.muted == true) {
+                button.innerHTML = "Pause";
+                Video_0.muted = false;
+                Video_0.play();
+            } else {
+                button.innerHTML = "Play";
+                Video_0.muted = true;
+                Video_0.pause();
+            }
+        });
+
+    },
+    tick: function (totalTime, deltaTime) {
+        var dTime = deltaTime / 1000;
+        if (markerFound == 1) {
+        }
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ////////////////////////////////////////////// adding dynamic /////////////////////////////////////////////
 
