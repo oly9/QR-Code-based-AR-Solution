@@ -1,38 +1,7 @@
 //const videoplayer = document.getElementById("assets")
 
 //console.log(videoplayer)
-window.addEventListener("click", () => { document.getElementById("video_assect1").play(); })
-window.addEventListener("click", () => { document.getElementById("video_assect2").play(); })
 
-
-
-
-const marker = document.querySelector("#marker");
-if(marker != null)
-    {
-        marker.addEventListener("markerFound", () => {
-            $("#scan-ui").hide();
-            document.getElementById("video_assect1").play();
-        });
-        marker.addEventListener("markerLost", () => {
-            $("#scan-ui").show();
-            document.getElementById("video_assect1").pause();
-        });
-
-    }
-    const marker2 = document.querySelector("#d_marker");
-    if(marker != null)
-        {
-            marker2.addEventListener("markerFound", () => {
-                $("#scan-ui").hide();
-                document.getElementById("video_assect2").play();
-            });
-            marker2.addEventListener("markerLost", () => {
-                $("#scan-ui").show();
-                document.getElementById("video_assect2").pause();
-            });
-    
-        }
 
 ////////////////////////////////////////// API INVOCKING //////////////////////////////////
 
@@ -87,6 +56,37 @@ function getDeviceType() {
     }
 }
 
+if (getDeviceType() === "ios") {
+    $("#playButton").show()
+    //$("body").append(`<button id="playButton" style="position: absolute; top: 50%; left: 50%; z-index: 1; "> Play </button>`);
+    // if (id === "IbX3YGm") {
+    //     const video = document.getElementById("video_assect1");
+    //     $("#playButton").click(function (e) { 
+    //         console.log("Button clicked");
+    //         this.hide();
+    //         video.play();
+            
+    //     });
+    // }
+    // else {
+    //     const video = document.getElementById("video_assect2");
+    //     $("#playButton").click(function (e) { 
+    //         console.log("Button clicked");
+    //         this.hide();
+    //         video.play();
+            
+    //     })
+
+    // }
+    $("#playButton").click(function (e) { 
+                console.log("Button clicked");
+                this.hide();
+                //video.play();
+            })
+}
+else{
+    $("#playButton").hide()
+}
 console.log(getDeviceType())
 
 
@@ -116,6 +116,53 @@ window.addEventListener("load", function () {
         .then(data => console.log("Device info sent:", data))
         .catch(error => console.error("Error sending device info:", error));
 });
+window.addEventListener("click", () => { document.getElementById("video_assect1").play(); });
+window.addEventListener("click", () => { document.getElementById("video_assect2").play(); });
+
+
+
+// document.getElementById("playButton").addEventListener("click", () => {
+//     $("#playButton").hide();
+//      document.getElementById("video_assect1").play();
+//       document.getElementById("video_assect2").play(); 
+//     })
+
+const marker = document.querySelector("#marker");
+if (marker != null) {
+    marker.addEventListener("markerFound", () => {
+        $("#scan-ui").hide();
+        // if(getDeviceType() ==="ios"){
+
+        //     $("#playButton").show();
+        // }
+        document.getElementById("video_assect1").play();
+    });
+    marker.addEventListener("markerLost", () => {
+        $("#scan-ui").show();
+        if(getDeviceType() ==="ios")
+            {
+                $("#playButton").hide();
+            }
+        document.getElementById("video_assect1").pause();
+    });
+
+}
+const marker2 = document.querySelector("#d_marker");
+if (marker != null) {
+    marker2.addEventListener("markerFound", () => {
+        $("#scan-ui").hide();
+        document.getElementById("video_assect2").play();
+    });
+    marker2.addEventListener("markerLost", () => {
+        $("#scan-ui").show();
+        if(getDeviceType() ==="ios")
+            {
+                $("#playButton").hide();
+            }
+        document.getElementById("video_assect2").pause();
+    });
+
+}
 
 ////////////////////////////////////////////// adding dynamic /////////////////////////////////////////////
 
@@ -210,7 +257,7 @@ async function loadFiles() {
             <!-- add a simple camera -->
             <a-entity camera></a-entity>
           </a-scene>`)
-    
+
         const marker_Dynamic = document.querySelector("#marker");
         marker_Dynamic.addEventListener("markerFound", () => {
             $("#scan-ui").hide();
@@ -220,7 +267,7 @@ async function loadFiles() {
             $("#scan-ui").show();
             document.getElementById("dynamic_marker").pause();
         });
-    
+
         window.addEventListener("click", () => { document.getElementById("dynamic_marker").play(); })
 
     } catch (error) {

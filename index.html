@@ -2,62 +2,241 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta aframe-injected="" name="mobile-web-app-capable" content="yes">
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <!-- we import arjs version without NFT but with marker + location based support -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script>
 
-  <title>QR Code based AR Solution</title>
-  <!-- <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script> -->
-  <!-- <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
-  <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script> -->
-  <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
-  <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.7.7/aframe/build/aframe-ar.js"></script>
+        // const scanUI = document.querySelector("#scan-ui");
+        const baseUIL = 'https://178.128.116.81/cms/';
 
-  <!-- A frame -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.0/aframe/build/aframe-ar.min.js"></script> -->
-  <!-- JQuery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="style.css">
+        var fatchdataURL = baseUIL + 'api/uploads/';
 
-<body style='margin : 0px; overflow: hidden;'>
-  <div id="scan-ui">
-    <img src="/ScanerMarker.png" alt="" srcset="Scanning UI">
-  </div>
+        // Create a URL object
+        const urlObj = new URL(window.location.href);
 
-  <a-scene id="ARScene" embedded arjs='sourceType: webcam; debugUIEnabled: false' vr-mode-ui='enabled: false'>
+        // Extract the parameters
+        const videoParam = urlObj.searchParams.get("video");
+        const patternParam = urlObj.searchParams.get("pattern");
 
-    <a-assets id="assets">
-      <video id="video_assect1" src="/video/AR_Video_File.mp4" autoplay="" loop="true"></video>
-      <video id="video_assect2" src="/video/video.mp4" autoplay="" loop="true"></video>
-    </a-assets>
+        //https://178.128.116.81/cms/api/uploads/IbX3YGm/marker.patt
+        //https://178.128.116.81/cms/api/uploads/IbX3YGm/video.mp4
 
-    <!--a-marker preset="hiro" emitevents="true" id="marker"-->
-    <a-marker id="marker" type='pattern' url='./marker-patterns/NewMarker_Scanme.patt' preset='custom' emitevents="true"
-      smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
-      <a-video id="player" src="#video_assect1" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">
-      </a-video>
-    </a-marker>
+        console.log("Video:", videoParam)
 
-    <a-marker id="d_marker" type='pattern' url='./marker-patterns/marker_2.patt' preset='custom' emitevents="true"
-      smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
-      <a-video id="player2" src="#video_assect2" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">
-      </a-video>
-    </a-marker>
 
-    <!-- handle marker with hiro preset -->
-    <!-- <a-marker preset='hiro'>
-          <a-box position='0 0.5 0' material='color: green;'></a-box>
-        </a-marker>-->
+        var patternUrl = fatchdataURL + "IbX3YGm/marker.patt";
+        var videoUrl = fatchdataURL + "IbX3YGm/video.mp4";
+        var id = "IbX3YGm";
 
-    <!-- handle barcode marker 
-        <a-marker type='barcode' value='5'>
-          <a-box position='0 0.5 0' material='color: blue;'></a-box>
-        </a-marker> -->
+        if (patternParam != null) {
 
-    <!-- add a simple camera -->
-    <a-entity camera></a-entity>
-  </a-scene>
+            console.log("PatternChaned")
 
-  <script src="index.js"></script>
+            patternUrl = fatchdataURL + patternParam;
+            videoUrl = fatchdataURL + videoParam;
+            const words = patternParam.split('/');
+            id = words[0]
+            console.log("ID: " + id)
+        }
+
+        console.log("baseurl:  " + fatchdataURL)
+
+        console.log("PatternURL:  " + patternUrl)
+        console.log("VideoURL:  " + videoUrl)
+
+        function getDeviceType() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            if (/android/i.test(userAgent)) {
+                return "android";
+            } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return "ios";
+            } else {
+                return "others";
+            }
+        }
+
+        console.log(getDeviceType())
+
+        window.addEventListener("load", function () {
+            const deviceType = getDeviceType();
+
+
+            // Data to send to the API
+            const data = {
+                id: id,                //"IbX3YGm", // replace this with a dynamic user or session ID if needed
+                deviceName: deviceType
+            };
+
+            // Send the data to the API
+            //new cms http://178.128.116.81/cms
+            //new cms https://qrgen-tau.vercel.app/api/collect-device-info
+            fetch("https://proxy-eqyn.vercel.app/api/proxy", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => console.log("Device info sent:", data))
+                .catch(error => console.error("Error sending device info:", error));
+        });
+
+
+        var markerFound = 0;
+        AFRAME.registerComponent('button', {
+            init: function () {
+                var elem = document.documentElement;
+                var marker1 = document.querySelector("#marker");
+                var marker2 = document.querySelector("#d_marker");
+                var fullbutton = document.querySelector("#fullscreen");
+                var Video_0 = document.querySelector("#video_assect1");
+                var Video_1 = document.querySelector("#video_assect2");
+                var button = document.querySelector("#mutebutton");
+                button.hidden = true;
+                Video_0.pause();
+                Video_1.pause();
+
+                marker1.addEventListener("markerFound", function (evt) {
+                    markerFound = 1;
+                    button.hidden = false;
+                    Video_0.play();  //if video should start immediently on marker detection
+                });
+
+                marker1.addEventListener("markerLost", function (evt) {
+                    markerFound = 0;
+                    Video_0.pause();
+                    button.hidden = true;
+                });
+                marker2.addEventListener("markerFound", function (evt) {
+                    markerFound = 1;
+                    button.hidden = false;
+                    Video_1.play();  //if video should start immediently on marker detection
+                });
+
+                marker2.addEventListener("markerLost", function (evt) {
+                    markerFound = 0;
+                    Video_1.pause();
+                    button.hidden = true;
+                });
+
+                button.addEventListener("click", function (evt) {
+                    console.log("button clicked")
+                    if (Video_0.muted == true) {
+                            button.innerHTML = "Pause";
+                            Video_0.muted = false;
+                            Video_0.play();
+                            Video_1.muted = false;
+                            Video_1.play();
+                        } else {
+                            button.innerHTML = "Play";
+                            Video_0.muted = true;
+                            Video_0.pause();
+                            Video_1.muted = true;
+                            Video_1.pause();
+                        }
+                    // if (id === "IbX3YGm") {
+                    //     if (Video_0.muted == true) {
+                    //         button.innerHTML = "Pause";
+                    //         Video_0.muted = false;
+                    //         Video_0.play();
+                    //     } else {
+                    //         button.innerHTML = "Play";
+                    //         Video_0.muted = true;
+                    //         Video_0.pause();
+                    //     }
+
+                    // }
+                    // else {
+                    //     if (Video_1.muted == true) {
+                    //         button.innerHTML = "Pause";
+                    //         Video_1.muted = false;
+                    //         Video_1.play();
+                    //     } else {
+                    //         button.innerHTML = "Play";
+                    //         Video_1.muted = true;
+                    //         Video_1.pause();
+                    //     }
+                    // }
+
+
+                });
+
+                fullbutton.addEventListener("click",
+                    function (evt) {
+                        if (fullscreen == 0) {
+                            if (elem.requestFullscreen) {
+                                elem.requestFullscreen();
+                            } else if (elem.mozRequestFullScreen) {
+                                /* Firefox */
+                                elem.mozRequestFullScreen();
+                            } else if (elem.webkitRequestFullscreen) {
+                                /* Chrome, Safari and Opera */
+                                elem.webkitRequestFullscreen();
+                            } else if (elem.msRequestFullscreen) {
+                                /* IE/Edge */
+                                elem.msRequestFullscreen();
+                            }
+                            fullbutton.setAttribute("src", "./Marker-Images/106830.png");
+                            fullscreen = 1;
+                        } else {
+                            if (document.exitFullscreen) {
+                                document.exitFullscreen();
+                            } else if (document.webkitExitFullscreen) {
+                                document.webkitExitFullscreen();
+                            } else if (document.mozCancelFullScreen) {
+                                document.mozCancelFullScreen();
+                            } else if (document.msExitFullscreen) {
+                                document.msExitFullscreen();
+                            }
+                            fullbutton.setAttribute("src", "/Marker-Images/10181212.png");
+                            fullscreen = 0;
+                        }
+                    });
+            },
+            tick: function (totalTime, deltaTime) {
+                var dTime = deltaTime / 1000;
+                if (markerFound == 1) {
+                }
+            }
+        });
+    </script>
+</head>
+
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+    <div style='position: absolute; bottom: 10px; right: 30px; width:100%; text-align: center; z-index: 1;'>
+        <button id="mutebutton" style='position: absolute; bottom: 10px' hidden>Play</button>
+    </div>
+    <div style='position: absolute; bottom: 5px; left: 30px; width:100%; text-align: right; z-index: 1;'>
+        <input type="image" id="fullscreen" src="./Marker-Images/10181212.png"
+            style='position: absolute; bottom: 0px; right: 35px;height: 50px;width: 50px;'></input>
+    </div>
+    <a-scene embedded arjs="debugUIEnabled: false; sourceType: webcam" vr-mode-ui="enabled: false">
+        <a-entity id="mouseCursor" cursor="rayOrigin: mouse"
+            raycaster="objects: .intersectable; useWorldCoordinates: true;"></a-entity>
+        <a-assets id="assets">
+            <video id="video_assect1" src="./video/AR_Video_File.mp4" autoplay="" loop="true"></video>
+            <video id="video_assect2" src="./video/video.mp4" autoplay="" loop="true"></video>
+        </a-assets>
+
+        <!--a-marker preset="hiro" emitevents="true" id="marker"-->
+        <a-marker id="marker" type='pattern' url='./marker-patterns/NewMarker_Scanme.patt' preset='custom'
+            emitevents="true" smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
+            <a-video id="player" src="#video_assect1" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">
+            </a-video>
+        </a-marker>
+
+        <a-marker id="d_marker" type='pattern' url='./marker-patterns/marker_2.patt' preset='custom' emitevents="true"
+            smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
+            <a-video id="player2" src="#video_assect2" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">
+            </a-video>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
 
 </body>
+
+</html>
