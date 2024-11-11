@@ -24,51 +24,6 @@
   <link rel="stylesheet" href="style.css">
   <script>
 
-
-    var markerFound = 0;
-    AFRAME.registerComponent('button', {
-      init: function () {
-        //var elem = document.documentElement;
-        var marker = document.querySelector("#marker");
-        //var fullbutton = document.querySelector("#fullscreen");
-        var Video_0 = document.querySelector("#video_assect1");
-        var button = document.querySelector("#mutebutton");
-        button.hidden = true;
-        Video_0.pause();
-
-        marker.addEventListener("markerFound", function (evt) {
-          markerFound = 1;
-          button.hidden = false;
-          //Video_0.play();  //if video should start immediently on marker detection
-        });
-
-        marker.addEventListener("markerLost", function (evt) {
-          markerFound = 0;
-          Video_0.pause();
-          button.hidden = true;
-        });
-
-        button.addEventListener("click", function (evt) {
-          console.log("button clicked")
-          if (Video_0.muted == true) {
-            button.innerHTML = "Pause";
-            Video_0.muted = false;
-            Video_0.play();
-          } else {
-            button.innerHTML = "Play";
-            Video_0.muted = true;
-            Video_0.pause();
-          }
-        });
-
-      },
-      tick: function (totalTime, deltaTime) {
-        var dTime = deltaTime / 1000;
-        if (markerFound == 1) {
-        }
-      }
-    });
-
   </script>
 </head>
 
@@ -88,8 +43,11 @@
       raycaster="objects: .intersectable; useWorldCoordinates: true;"></a-entity>
 
     <a-assets id="assets">
-      <video id="video_assect1" src="./video/AR_Video_File.mp4" autoplay="" loop="true"></video>
-      <video id="video_assect2" src="./video/video.mp4" autoplay="" loop="true"></video>
+      <!-- <video id="video_assect1" autoplay="true" loop crossorigin="anonymous" src="./video/AR_Video_File.mp4" webkit-playsinline playsinline controls muted></video>
+      <video id="video_assect2" autoplay="true" loop crossorigin="anonymous" src="./video/video.mp4" webkit-playsinline playsinline controls muted></video> -->
+
+      <video id="video_assect1" src="./video/AR_Video_File.mp4" autoplay="true" loop="true" webkit-playsinline playsinline></video>
+      <video id="video_assect2" src="./video/video.mp4" autoplay="true" loop="true" webkit-playsinline playsinline></video>
     </a-assets>
 
     <!--a-marker preset="hiro" emitevents="true" id="marker"-->
