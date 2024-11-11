@@ -56,6 +56,139 @@ function getDeviceType() {
     }
 }
 
+if (getDeviceType() == "ios") {
+    window.location.href = "./ioshtml.html"
+
+
+
+    // var markerFound = 0;
+    // AFRAME.registerComponent('button', {
+    //     init: function () {
+    //         //var elem = document.documentElement;
+    //         var marker = document.querySelector("#marker");
+    //         //var fullbutton = document.querySelector("#fullscreen");
+    //         var Video_0 = document.querySelector("#video_assect1");
+    //         var button = document.querySelector("#mutebutton");
+    //         button.hidden = true;
+    //         Video_0.pause();
+
+    //         marker.addEventListener("markerFound", function (evt) {
+    //             markerFound = 1;
+    //             button.hidden = false;
+    //             //Video_0.play();  //if video should start immediently on marker detection
+    //         });
+
+    //         marker.addEventListener("markerLost", function (evt) {
+    //             markerFound = 0;
+    //             Video_0.pause();
+    //             button.hidden = true;
+    //         });
+
+    //         button.addEventListener("click", function (evt) {
+    //             console.log("button clicked")
+    //             if (Video_0.muted == true) {
+    //                 button.innerHTML = "Pause";
+    //                 Video_0.muted = false;
+    //                 Video_0.play();
+    //             } else {
+    //                 button.innerHTML = "Play";
+    //                 Video_0.muted = true;
+    //                 Video_0.pause();
+    //             }
+    //         });
+
+    //     },
+    //     tick: function (totalTime, deltaTime) {
+    //         var dTime = deltaTime / 1000;
+    //         if (markerFound == 1) {
+    //         }
+    //     }
+    // });
+
+    // AFRAME.registerComponent('button', {
+    //     init: function () {
+    //         //var elem = document.documentElement;
+    //         var marker = document.querySelector("#d_marker");
+    //         //var fullbutton = document.querySelector("#fullscreen");
+    //         var Video_0 = document.querySelector("#video_assect2");
+    //         var button = document.querySelector("#mutebutton");
+    //         button.hidden = true;
+    //         Video_0.pause();
+
+    //         marker.addEventListener("markerFound", function (evt) {
+    //             markerFound = 1;
+    //             button.hidden = false;
+    //             //Video_0.play();  //if video should start immediently on marker detection
+    //         });
+
+    //         marker.addEventListener("markerLost", function (evt) {
+    //             markerFound = 0;
+    //             Video_0.pause();
+    //             button.hidden = true;
+    //         });
+
+    //         button.addEventListener("click", function (evt) {
+    //             console.log("button clicked")
+    //             if (Video_0.muted == true) {
+    //                 button.innerHTML = "Pause";
+    //                 Video_0.muted = false;
+    //                 Video_0.play();
+    //             } else {
+    //                 button.innerHTML = "Play";
+    //                 Video_0.muted = true;
+    //                 Video_0.pause();
+    //             }
+    //         });
+
+    //     },
+    //     tick: function (totalTime, deltaTime) {
+    //         var dTime = deltaTime / 1000;
+    //         if (markerFound == 1) {
+    //         }
+    //     }
+    // });
+
+}
+else {
+    window.addEventListener("click", () => { document.getElementById("video_assect1").play(); });
+    window.addEventListener("click", () => { document.getElementById("video_assect2").play(); });
+
+    const marker = document.querySelector("#marker");
+    if (marker != null) {
+        marker.addEventListener("markerFound", () => {
+            $("#scan-ui").hide();
+            // if(getDeviceType() ==="ios"){
+
+            //     $("#playButton").show();
+            // }
+            document.getElementById("video_assect1").play();
+        });
+        marker.addEventListener("markerLost", () => {
+            $("#scan-ui").show();
+            if (getDeviceType() === "ios") {
+                $("#playButton").hide();
+            }
+            document.getElementById("video_assect1").pause();
+        });
+
+    }
+    const marker2 = document.querySelector("#d_marker");
+    if (marker != null) {
+        marker2.addEventListener("markerFound", () => {
+            $("#scan-ui").hide();
+            document.getElementById("video_assect2").play();
+        });
+        marker2.addEventListener("markerLost", () => {
+            $("#scan-ui").show();
+            if (getDeviceType() === "ios") {
+                $("#playButton").hide();
+            }
+            document.getElementById("video_assect2").pause();
+        });
+
+    }
+
+}
 // if (getDeviceType() === "ios") {
 //     $("#playButton").show()
 //     //$("body").append(`<button id="playButton" style="position: absolute; top: 50%; left: 50%; z-index: 1; "> Play </button>`);
@@ -117,135 +250,6 @@ window.addEventListener("load", function () {
         .catch(error => console.error("Error sending device info:", error));
 });
 
-if (getDeviceType() == "ios") {
-    var markerFound = 0;
-    AFRAME.registerComponent('button', {
-        init: function () {
-            //var elem = document.documentElement;
-            var marker = document.querySelector("#marker");
-            //var fullbutton = document.querySelector("#fullscreen");
-            var Video_0 = document.querySelector("#video_assect1");
-            var button = document.querySelector("#mutebutton");
-            button.hidden = true;
-            Video_0.pause();
-
-            marker.addEventListener("markerFound", function (evt) {
-                markerFound = 1;
-                button.hidden = false;
-                //Video_0.play();  //if video should start immediently on marker detection
-            });
-
-            marker.addEventListener("markerLost", function (evt) {
-                markerFound = 0;
-                Video_0.pause();
-                button.hidden = true;
-            });
-
-            button.addEventListener("click", function (evt) {
-                console.log("button clicked")
-                if (Video_0.muted == true) {
-                    button.innerHTML = "Pause";
-                    Video_0.muted = false;
-                    Video_0.play();
-                } else {
-                    button.innerHTML = "Play";
-                    Video_0.muted = true;
-                    Video_0.pause();
-                }
-            });
-
-        },
-        tick: function (totalTime, deltaTime) {
-            var dTime = deltaTime / 1000;
-            if (markerFound == 1) {
-            }
-        }
-    });
-
-    AFRAME.registerComponent('button', {
-        init: function () {
-            //var elem = document.documentElement;
-            var marker = document.querySelector("#d_marker");
-            //var fullbutton = document.querySelector("#fullscreen");
-            var Video_0 = document.querySelector("#video_assect2");
-            var button = document.querySelector("#mutebutton");
-            button.hidden = true;
-            Video_0.pause();
-
-            marker.addEventListener("markerFound", function (evt) {
-                markerFound = 1;
-                button.hidden = false;
-                //Video_0.play();  //if video should start immediently on marker detection
-            });
-
-            marker.addEventListener("markerLost", function (evt) {
-                markerFound = 0;
-                Video_0.pause();
-                button.hidden = true;
-            });
-
-            button.addEventListener("click", function (evt) {
-                console.log("button clicked")
-                if (Video_0.muted == true) {
-                    button.innerHTML = "Pause";
-                    Video_0.muted = false;
-                    Video_0.play();
-                } else {
-                    button.innerHTML = "Play";
-                    Video_0.muted = true;
-                    Video_0.pause();
-                }
-            });
-
-        },
-        tick: function (totalTime, deltaTime) {
-            var dTime = deltaTime / 1000;
-            if (markerFound == 1) {
-            }
-        }
-    });
-
-}
-else {
-    window.addEventListener("click", () => { document.getElementById("video_assect1").play(); });
-    window.addEventListener("click", () => { document.getElementById("video_assect2").play(); });
-
-    const marker = document.querySelector("#marker");
-    if (marker != null) {
-        marker.addEventListener("markerFound", () => {
-            $("#scan-ui").hide();
-            // if(getDeviceType() ==="ios"){
-
-            //     $("#playButton").show();
-            // }
-            document.getElementById("video_assect1").play();
-        });
-        marker.addEventListener("markerLost", () => {
-            $("#scan-ui").show();
-            if (getDeviceType() === "ios") {
-                $("#playButton").hide();
-            }
-            document.getElementById("video_assect1").pause();
-        });
-
-    }
-    const marker2 = document.querySelector("#d_marker");
-    if (marker != null) {
-        marker2.addEventListener("markerFound", () => {
-            $("#scan-ui").hide();
-            document.getElementById("video_assect2").play();
-        });
-        marker2.addEventListener("markerLost", () => {
-            $("#scan-ui").show();
-            if (getDeviceType() === "ios") {
-                $("#playButton").hide();
-            }
-            document.getElementById("video_assect2").pause();
-        });
-
-    }
-
-}
 
 
 
