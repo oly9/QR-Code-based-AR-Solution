@@ -12,7 +12,7 @@
   <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script> -->
   <!-- <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
   <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.7.7/aframe/build/aframe-ar.js"></script> -->
-  
+
   <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
   <!-- we import arjs version without NFT but with marker + location based support -->
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
@@ -22,6 +22,55 @@
   <!-- JQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <link rel="stylesheet" href="style.css">
+  <script>
+
+
+    var markerFound = 0;
+    AFRAME.registerComponent('button', {
+      init: function () {
+        //var elem = document.documentElement;
+        var marker = document.querySelector("#marker");
+        //var fullbutton = document.querySelector("#fullscreen");
+        var Video_0 = document.querySelector("#video_assect1");
+        var button = document.querySelector("#mutebutton");
+        button.hidden = true;
+        Video_0.pause();
+
+        marker.addEventListener("markerFound", function (evt) {
+          markerFound = 1;
+          button.hidden = false;
+          //Video_0.play();  //if video should start immediently on marker detection
+        });
+
+        marker.addEventListener("markerLost", function (evt) {
+          markerFound = 0;
+          Video_0.pause();
+          button.hidden = true;
+        });
+
+        button.addEventListener("click", function (evt) {
+          console.log("button clicked")
+          if (Video_0.muted == true) {
+            button.innerHTML = "Pause";
+            Video_0.muted = false;
+            Video_0.play();
+          } else {
+            button.innerHTML = "Play";
+            Video_0.muted = true;
+            Video_0.pause();
+          }
+        });
+
+      },
+      tick: function (totalTime, deltaTime) {
+        var dTime = deltaTime / 1000;
+        if (markerFound == 1) {
+        }
+      }
+    });
+
+  </script>
+</head>
 
 <body style='margin : 0px; overflow: hidden;'>
   <!-- <button id="playButton" style="position: absolute; top: 50%; left: 50%; z-index: 9999999991; width: 200px; height:80px ;"> Play </button> -->
@@ -35,8 +84,9 @@
 
 
   <a-scene id="ARScene" embedded arjs='sourceType: webcam; debugUIEnabled: false' vr-mode-ui='enabled: false'>
-    <a-entity id="mouseCursor" cursor="rayOrigin: mouse" raycaster="objects: .intersectable; useWorldCoordinates: true;"></a-entity>
-    
+    <a-entity id="mouseCursor" cursor="rayOrigin: mouse"
+      raycaster="objects: .intersectable; useWorldCoordinates: true;"></a-entity>
+
     <a-assets id="assets">
       <video id="video_assect1" src="./video/AR_Video_File.mp4" autoplay="" loop="true"></video>
       <video id="video_assect2" src="./video/video.mp4" autoplay="" loop="true"></video>
