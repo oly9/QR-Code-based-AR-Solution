@@ -16,25 +16,23 @@
       });
       const exampleTarget = document.querySelector('#example-target');
       const video = document.querySelector('#video');
-      document.addEventListener('click', () => {
-        video.play().then(() => {
-          console.log('Video playback started successfully.');
-        }).catch(err => {
-          console.error('Error starting video playback:', err);
-        });
-      });
-
+      const button = document.querySelector('#mutebutton');
+      var temp = false
 
       // detect target found
       exampleTarget.addEventListener("targetFound", event => {
+        temp = true;
         video.play()
         console.log("target found");
       });
       // detect target lost
       exampleTarget.addEventListener("targetLost", event => {
+        temp = false;
         video.pause()
         console.log("target lost");
       });
+
+
 
 
       // const scanUI = document.querySelector("#scan-ui");
@@ -70,11 +68,6 @@
         console.log("ID: " + id)
       }
 
-      // console.log("baseurl:  " + fatchdataURL)
-
-      // console.log("PatternURL:  " + patternUrl)
-      // console.log("VideoURL:  " + videoUrl)
-
       function getDeviceType() {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
@@ -88,11 +81,26 @@
       }
 
       console.log("device: " + getDeviceType());
+      if (getDeviceType() === "ios") {
+        
+        button.style.display = "block"
+        document.addEventListener('click', () => {
+        video.play().then(() => {
+          if(temp === true){
+            button.style.display = "none"
+          }
+          console.log('Video playback started successfully.');
+        }).catch(err => {
+          console.error('Error starting video playback:', err);
+        });
+      });
+        
+
+      }
+
 
       window.addEventListener("load", function () {
         const deviceType = getDeviceType();
-
-
         // Data to send to the API
         const data = {
           id: id,                //"IbX3YGm", // replace this with a dynamic user or session ID if needed
@@ -115,6 +123,7 @@
       });
     });
 
+
   </script>
   <style>
     .a-enter-vr {
@@ -124,7 +133,9 @@
 </head>
 
 <body>
-  <button type="button" ></button>
+  <div style='position: absolute; bottom: 10px;  width:100%;  display: flex; justify-content: center; z-index: 1;'>
+    <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'><img src="./Marker-Images/button.png" alt="PALY BUTTON" srcset="" style="height: 50px; width: 50px;"></button>
+  </div>
   <a-scene mindar-image="imageTargetSrc: ./assects/Pantene.mind;" color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: false">
