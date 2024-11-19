@@ -2,6 +2,9 @@
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   <script>
@@ -13,6 +16,13 @@
       });
       const exampleTarget = document.querySelector('#example-target');
       const video = document.querySelector('#video');
+      document.addEventListener('click', () => {
+        video.play().then(() => {
+          console.log('Video playback started successfully.');
+        }).catch(err => {
+          console.error('Error starting video playback:', err);
+        });
+      });
 
 
       // detect target found
@@ -116,7 +126,6 @@
     .a-enter-vr {
       display: none;
     }
-    
   </style>
 </head>
 
@@ -125,13 +134,13 @@
     renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: false">
     <a-assets>
-      <video id="video" src="./video/AR_Video_File.mp4" autoplay="" loop="true" ></video>
+      <video id="video" src="./video/AR_Video_File.mp4" autoplay="" loop="true" playsinline webkit-playsinline></video>
     </a-assets>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <a-entity id="example-target" mindar-image-target="targetIndex: 0">
-      <a-video src="#video" heiight="1" width="1"  position="0 0 0" rotation="0 0 0"> </a-video>
+      <a-video src="#video" heiight="1" width="1" position="0 0 0" rotation="0 0 0"> </a-video>
     </a-entity>
   </a-scene>
 
