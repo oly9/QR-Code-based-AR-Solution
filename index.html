@@ -37,8 +37,8 @@
       const patternUrl = patternParam ? fetchDataURL + patternParam : fetchDataURL + "IbX3YGm/marker.patt";
       const videoUrl = videoParam ? fetchDataURL + videoParam : fetchDataURL + "IbX3YGm/video.mp4";
 
-      // Set the video source
-      video.src = videoUrl;
+      // // Set the video source
+      // video.src = videoUrl;
 
       // Log dynamic URL handling
       console.log("Marker URL:", patternUrl);
@@ -79,7 +79,7 @@
 
       if (getDeviceType() === "ios") {
         button.style.display = "block"; // Show play button for iOS
-        button.addEventListener('click', () => {
+        document.addEventListener('click', () => {
           video.play().then(() => {
             button.style.display = "none";
             console.log("Video playback started on iOS.");
