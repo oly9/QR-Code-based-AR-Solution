@@ -1,0 +1,158 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const sceneEl = document.querySelector('a-scene');
+      let arSystem;
+      sceneEl.addEventListener('loaded', function () {
+        arSystem = sceneEl.systems["mindar-image-system"];
+      });
+      const exampleTarget = document.querySelector('#example-target');
+      const video = document.querySelector('#video');
+      const button = document.querySelector('#mutebutton');
+      var temp = false
+
+      // detect target found
+      exampleTarget.addEventListener("targetFound", event => {
+        temp = true;
+        video.play()
+        console.log("target found");
+      });
+      // detect target lost
+      exampleTarget.addEventListener("targetLost", event => {
+        temp = false;
+        video.pause()
+        console.log("target lost");
+      });
+
+
+
+
+      // const scanUI = document.querySelector("#scan-ui");
+      const baseUIL = 'https://178.128.116.81/cms/';
+
+      var fatchdataURL = baseUIL + 'api/uploads/';
+
+      // Create a URL object
+      const urlObj = new URL(window.location.href);
+
+      // Extract the parameters
+      const videoParam = urlObj.searchParams.get("video");
+      const patternParam = urlObj.searchParams.get("pattern");
+
+      //https://178.128.116.81/cms/api/uploads/IbX3YGm/marker.patt
+      //https://178.128.116.81/cms/api/uploads/IbX3YGm/video.mp4
+
+      console.log("Video:", videoParam)
+
+
+      var patternUrl = fatchdataURL + "IbX3YGm/marker.patt";
+      var videoUrl = fatchdataURL + "IbX3YGm/video.mp4";
+      var id = "IbX3YGm";
+
+      if (patternParam != null) {
+
+        console.log("PatternChaned")
+
+        patternUrl = fatchdataURL + patternParam;
+        videoUrl = fatchdataURL + videoParam;
+        const words = patternParam.split('/');
+        id = words[0];
+        console.log("ID: " + id)
+      }
+
+      function getDeviceType() {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        if (/android/i.test(userAgent)) {
+          return "android";
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          return "ios";
+        } else {
+          return "others";
+        }
+      }
+
+      console.log("device: " + getDeviceType());
+      if (getDeviceType() === "ios") {
+        
+        button.style.display = "block"
+        document.addEventListener('click', () => {
+        video.play().then(() => {
+          if(temp === true){
+            button.style.display = "none"
+          }
+          console.log('Video playback started successfully.');
+        }).catch(err => {
+          console.error('Error starting video playback:', err);
+        });
+      });
+        
+
+      }
+
+
+      window.addEventListener("load", function () {
+        const deviceType = getDeviceType();
+        // Data to send to the API
+        const data = {
+          id: id,                //"IbX3YGm", // replace this with a dynamic user or session ID if needed
+          deviceName: deviceType
+        };
+
+        // Send the data to the API
+        //new cms http://178.128.116.81/cms
+        //new cms https://qrgen-tau.vercel.app/api/collect-device-info
+        fetch("https://proxy-eqyn.vercel.app/api/proxy", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(response => response.json())
+          .then(data => console.log("Device info sent:", data))
+          .catch(error => console.error("Error sending device info:", error));
+      });
+    });
+
+
+  </script>
+  <style>
+    .a-enter-vr {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div style='position: absolute; bottom: 10px;  width:100%;  display: flex; justify-content: center; z-index: 1;'>
+    <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'><img src="./Marker-Images/button.png" alt="PALY BUTTON" srcset="" style="height: 50px; width: 50px;"></button>
+  </div>
+  <a-scene mindar-image="imageTargetSrc: ./assects/Pantene.mind;" color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
+    <a-assets>
+      <video id="video" src="./video/AR_Video_File.mp4" autoplay="" loop="true" playsinline webkit-playsinline></video>
+    </a-assets>
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <a-entity id="example-target" mindar-image-target="targetIndex: 0">
+      <!-- <a-video src="#video" heiight="1" width="1" position="0 0 0" rotation="0 0 0"> </a-video> -->
+      <a-video src="#video" position="0 0 0" scale="5 5 1" rotation="0 0 0">
+      </a-video>
+
+    </a-entity>
+  </a-scene>
+
+</body>
+
+</html>
