@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- A-Frame and MindAR.js -->
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const sceneEl = document.querySelector('a-scene');
+      let arSystem;
+
+      sceneEl.addEventListener('loaded', function () {
+        arSystem = sceneEl.systems["mindar-image-system"];
+      });
+
+      const exampleTarget = document.querySelector('#example-target');
+      const video = document.querySelector('#video');
+      const button = document.querySelector('#mutebutton');
+      let temp = false;
+
+      // Debounce for target detection
+      let targetTimeout;
+
+      // Dynamic URLs
+      const baseUIL = 'https://178.128.116.81/cms/';
+      const fetchDataURL = baseUIL + 'api/uploads/';
+      const urlParams = new URLSearchParams(window.location.search);
+
+      const patternParam = urlParams.get("pattern");
+      const videoParam = urlParams.get("video");
+
+      const patternUrl = patternParam ? fetchDataURL + patternParam : fetchDataURL + "IbX3YGm/marker.patt";
+      const videoUrl = videoParam ? fetchDataURL + videoParam : fetchDataURL + "IbX3YGm/video.mp4";
+
+      // // Set the video source
+      // video.src = videoUrl;
+
+      // Log dynamic URL handling
+      console.log("Marker URL:", patternUrl);
+      console.log("Video URL:", videoUrl);
+
+      // Fallback if video fails to load
+      // video.onerror = () => {
+      //   console.error("Error: Unable to load video file!");
+      // };
+
+      // Target Found Event
+      exampleTarget.addEventListener("targetFound", () => {
+        clearTimeout(targetTimeout); // Clear lost timer
+        temp = true;
+        video.play().then(() => {
+          console.log("Video playback started.");
+        }).catch(err => {
+          console.error("Error starting video playback:", err);
+        });
+      });
+
+      // Target Lost Event with Debounce
+      exampleTarget.addEventListener("targetLost", () => {
+        targetTimeout = setTimeout(() => {
+          temp = false;
+          video.pause();
+          console.log("Target lost - video paused.");
+        }, 300); // 300ms debounce delay
+      });
+
+      // iOS Video Playback Handling
+      function getDeviceType() {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        if (/android/i.test(userAgent)) return "android";
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) return "ios";
+        return "others";
+      }
+
+      if (getDeviceType() === "ios") {
+        button.style.display = "block"; // Show play button for iOS
+        document.addEventListener('click', () => {
+          video.play().then(() => {
+            button.style.display = "none";
+            console.log("Video playback started on iOS.");
+          }).catch(err => {
+            console.error("Error starting video playback on iOS:", err);
+          });
+        });
+      }
+
+      // Smooth Object Transformations
+      const smoothPosition = new THREE.Vector3();
+      const smoothingFactor = 0.1;
+
+      sceneEl.addEventListener("update", () => {
+        const object = document.querySelector('a-video').object3D;
+        const currentPosition = object.position;
+
+        // Smooth position update
+        smoothPosition.lerp(currentPosition, smoothingFactor);
+        object.position.copy(smoothPosition);
+      });
+
+      // Log Device Info
+      window.addEventListener("load", () => {
+        const data = {
+          id: patternParam ? patternParam.split('/')[0] : "IbX3YGm",
+          deviceName: getDeviceType()
+        };
+
+        fetch("https://proxy-eqyn.vercel.app/api/proxy", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        }).then(response => response.json())
+          .then(data => console.log("Device info sent:", data))
+          .catch(error => console.error("Error sending device info:", error));
+      });
+    });
+  </script>
+
+  <style>
+    .a-enter-vr { display: none; }
+  </style>
+</head>
+
+<body>
+  <div style='position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: center; z-index: 1;'>
+    <button id="mutebutton" style='display: none; background-color: transparent; border: 0;'>
+      <img src="./Marker-Images/button.png" alt="PLAY BUTTON" style="height: 50px; width: 50px;">
+    </button>
+  </div>
+
+  <a-scene mindar-image="imageTargetSrc: ./assects/Pantene.mind;" color-space="sRGB"
+           renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
+           device-orientation-permission-ui="enabled: false">
+    <a-assets>
+      <video id="video" autoplay="" loop="true" playsinline webkit-playsinline></video>
+    </a-assets>
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <a-entity id="example-target" mindar-image-target="targetIndex: 0">
+      <a-video src="#video" position="0 0 0" scale="5 5 1" rotation="0 0 0"></a-video>
+    </a-entity>
+  </a-scene>
+</body>
+</html>
