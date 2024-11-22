@@ -109,6 +109,7 @@
       sceneEl.addEventListener("update", () => {
         const object = document.querySelector('a-video').object3D;
         const currentPosition = object.position;
+        
 
         // Smooth position update
         smoothPosition.lerp(currentPosition, smoothingFactor);
@@ -162,7 +163,8 @@
       width: 100%;
       justify-content: flex-end;
       flex-direction: column;
-      text-align: center;      
+      text-align: center;
+      padding: 10px;      
     }
     #mutebutton
     {
