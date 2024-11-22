@@ -215,12 +215,14 @@
     renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: false">
     <a-assets>
+      <img id="card" src="./assects/shadow.png" />
       <video id="video" src="./video/AR_Video_File.mp4" autoplay="" loop="true" playsinline webkit-playsinline></video>
     </a-assets>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <a-entity id="example-target" mindar-image-target="targetIndex: 0">
+      <a-plane src="#card" position="0 0 0" scale="2.1 2.1 1"  rotation="0 0 0"></a-plane>        
       <a-video src="#video" position="0 0 0" scale="2 2 1" rotation="0 0 0"></a-video>
     </a-entity>
   </a-scene>
