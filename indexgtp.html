@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,7 +21,8 @@
       const videoEntity = document.querySelector('a-video');
       const camera = document.querySelector("a-camera");
       const button = document.querySelector('#mutebutton');
-      var temp = false;
+      let temp = false;
+      let functionInvoked = false; // To ensure the function runs only once after 32 seconds
 
       // Base scale for consistent video size
       const baseScale = new THREE.Vector3(2, 2, 1); // Adjust based on your original video size
@@ -55,6 +57,21 @@
           videoEntity.object3D.scale.copy(baseScale.clone().multiplyScalar(scaleFactor));
         }
       }
+
+      // Function to execute after 32 seconds of video playback
+      function after32Seconds() {
+        console.log("32 seconds of video playback completed!");
+        document.getElementById("#upperUIHolder").style.display = "none";
+        // Add your custom logic here
+      }
+
+      // Monitor video playback time
+      video.addEventListener("timeupdate", () => {
+        if (video.currentTime >= 32 && !functionInvoked) {
+          functionInvoked = true; // Ensure the function is invoked only once
+          after32Seconds();
+        }
+      });
 
       // Call on each frame
       sceneEl.addEventListener("tick", updateScale);
@@ -155,15 +172,41 @@
       font-size: 14pt;
       font-family: Arial, Helvetica, sans-serif;
     }
+    .upperUI
+    {
+      position: absolute; 
+      top: 0px;  
+      width:100%;  
+      display: flex;
+      flex-direction: row;       
+      justify-content: center; 
+      z-index: 1;
+    }
+    .topperInner
+    {
+      display: flex;
+      flex-direction: column;       
+      justify-content: right; 
+      height: 100%;
+      width: 100%;
+      text-align: right; 
+    }
   </style>
 </head>
 
 <body>
+  <div class='upperUI'>
+    <div id="upperUIHolder" class="topperInner" style="display: none;">
+      <p id="" class="text">play</p>
+      <p id="" class="text">pause</p>
+      <p id="" class="text">shop</p>
+    </div>
+  </div>
   <div class='uitop'>
     <div class="inside">
       <p id="" class="text">Aim your device at the QR code</p>
       <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
-        <img src="./Marker-Images/button.png" alt="PLAY BUTTON" style="height: 50px; width: 50px; margin: 5px;">
+        <img src="./Marker-Images/button.png" alt="PLAY BUTTON" srcset="" style="height: 50px; width: 50px; margin: 5px;">
         <p id="clicktext" class="text">Click <i class="fa fa-hand-o-up"></i> Play</p>
       </button>
     </div>
@@ -174,7 +217,9 @@
     <a-assets>
       <video id="video" src="./video/AR_Video_File.mp4" autoplay="" loop="true" playsinline webkit-playsinline></video>
     </a-assets>
+
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
     <a-entity id="example-target" mindar-image-target="targetIndex: 0">
       <a-video src="#video" position="0 0 0" scale="2 2 1" rotation="0 0 0"></a-video>
     </a-entity>
