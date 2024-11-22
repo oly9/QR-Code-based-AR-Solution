@@ -207,7 +207,7 @@
       <p id="" class="text">Aim your device at the QR code</p>
       <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
         <img src="./Marker-Images/button.png" alt="PLAY BUTTON" srcset="" style="height: 50px; width: 50px; margin: 5px;">
-        <p id="clicktext" class="text">Click <i class="fa fa-hand-o-up"></i> Play</p>
+        <p id="clicktext" class="text">Click <i class="fa fa-hand-o-up"></i>to Play</p>
       </button>
     </div>
   </div>
@@ -222,8 +222,8 @@
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <a-entity id="example-target" mindar-image-target="targetIndex: 0">
-      <a-plane src="#card" position="0 0 0" scale="2.1 2.1 1"  rotation="0 0 0.01"></a-plane>        
       <a-video src="#video" position="0 0 0" scale="2 2 1" rotation="0 0 0"></a-video>
+      <a-plane src="#card" position="0 0 0.1"  color="black" opacity="0.5" scale="2.1 2.1 1"  rotation="0 0 0"></a-plane>        
     </a-entity>
   </a-scene>
 </body>
