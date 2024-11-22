@@ -7,6 +7,7 @@
 
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const sceneEl = document.querySelector('a-scene');
@@ -82,8 +83,10 @@
 
       console.log("device: " + getDeviceType());
       if (getDeviceType() === "ios") {
-        
+        var text = document.getElementById("#clicktext")
         button.style.display = "block"
+        text.style.display = "block"
+        
         document.addEventListener('click', () => {
         video.play().then(() => {
           if(temp === true){
@@ -143,12 +146,53 @@
     .a-enter-vr {
       display: none;
     }
+    .uitop
+    {
+      position: absolute; 
+      bottom: 0px;  
+      width:100%;  
+      display: flex;
+      flex-direction: row;       
+      justify-content: center; 
+      z-index: 1;
+    }
+    .inside
+    {
+      height: 100%;
+      width: 100%;
+      justify-content: flex-end;
+      flex-direction: column;
+      text-align: center;      
+    }
+    #mutebutton
+    {
+      justify-self: center;
+      padding: 5px;
+    }
+    .text
+    {
+      color: white;
+      text-decoration: double;
+      padding: 0px;
+      margin: 0px;
+      font-size: 14pt;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    
   </style>
 </head>
 
 <body>
-  <div style='position: absolute; bottom: 10px;  width:100%;  display: flex; justify-content: center; z-index: 1;'>
-    <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'><img src="./Marker-Images/button.png" alt="PALY BUTTON" srcset="" style="height: 50px; width: 50px;"></button>
+  <div class='uitop'>
+    <div class="inside">
+      <p id="" class="text">Aim your device at the QR code</p>
+      <button id="mutebutton"  style='display: none; background-color: transparent; border: 0px;'>
+        <img src="./Marker-Images/button.png" alt="PALY BUTTON" srcset="" style="height: 50px; width: 50px; margin: 5px;">
+        <p id="clicktext" class="text">Click <i class="fa fa-hand-o-up"></i> Play</p>
+      </button>
+      
+    </div>
+    
   </div>
   <a-scene mindar-image="imageTargetSrc: ./assects/Pantene.mind;" color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
