@@ -83,25 +83,24 @@
 
       console.log("device: " + getDeviceType());
       if (getDeviceType() === "ios") {
-        var text = document.getElementById("#clicktext")
-        button.style.display = "block"
-        text.style.display = "block"
-        
-        document.addEventListener('click', () => {
-        video.play().then(() => {
-          if(temp === true){
-            button.style.display = "none"
-          }
-          console.log('Video playback started successfully.');
-        }).catch(err => {
-          console.error('Error starting video playback:', err);
+        video.addEventListener("load", (event) => {
+          button.style.display = "block";
         });
-      });
-        
+        document.addEventListener('click', () => {
+          video.play().then(() => {
+            if (temp === true) {
+              button.style.display = "none";
+            }
+            console.log('Video playback started successfully.');
+          }).catch(err => {
+            console.error('Error starting video playback:', err);
+          });
+        });
+
 
       }
 
-      
+
       // Smooth Object Transformations
       const smoothPosition = new THREE.Vector3();
       const smoothingFactor = 0.1;
@@ -109,7 +108,7 @@
       sceneEl.addEventListener("update", () => {
         const object = document.querySelector('a-video').object3D;
         const currentPosition = object.position;
-        
+
 
         // Smooth position update
         smoothPosition.lerp(currentPosition, smoothingFactor);
@@ -147,33 +146,33 @@
     .a-enter-vr {
       display: none;
     }
-    .uitop
-    {
-      position: absolute; 
-      bottom: 0px;  
-      width:100%;  
+
+    .uitop {
+      position: absolute;
+      bottom: 0px;
+      width: 100%;
       display: flex;
-      flex-direction: row;       
-      justify-content: center; 
+      flex-direction: row;
+      justify-content: center;
       z-index: 1;
     }
-    .inside
-    {
+
+    .inside {
       height: 100%;
       width: 100%;
       justify-content: flex-end;
       flex-direction: column;
       text-align: center;
-      padding-bottom: 15px;  
-      cursor: pointer;    
+      padding-bottom: 15px;
+      cursor: pointer;
     }
-    #mutebutton
-    {
+
+    #mutebutton {
       justify-self: center;
       padding: 5px;
     }
-    .text
-    {
+
+    .text {
       color: white;
       text-decoration: double;
       padding: 0px;
@@ -181,7 +180,6 @@
       font-size: 14pt;
       font-family: Arial, Helvetica, sans-serif;
     }
-    
   </style>
 </head>
 
@@ -189,13 +187,14 @@
   <div class='uitop'>
     <div class="inside">
       <p id="" class="text">Aim your device at the QR code</p>
-      <button id="mutebutton"  style='display: none; background-color: transparent; border: 0px;'>
-        <img src="./Marker-Images/button.png" alt="PALY BUTTON" srcset="" style="height: 50px; width: 50px; margin: 5px;">
+      <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
+        <img src="./Marker-Images/button.png" alt="PALY BUTTON" srcset=""
+          style="height: 50px; width: 50px; margin: 5px;">
         <p id="clicktext" class="text">Click <i class="fa fa-hand-o-up"></i> Play</p>
       </button>
-      
+
     </div>
-    
+
   </div>
   <a-scene mindar-image="imageTargetSrc: ./assects/Pantene.mind;" color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
