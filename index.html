@@ -88,6 +88,7 @@
 
       console.log("device: " + getDeviceType());
       if (getDeviceType() === "ios") {
+        button.style.display = "block";
         document.addEventListener('click', () => {
           video.play().then(() => {
             if (temp === true) {
@@ -153,6 +154,7 @@
       position: absolute;
       bottom: 0px;
       width: 100%;
+      height: 120px;
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -190,7 +192,7 @@
     <div class="inside">
       <p id="" class="text">Aim your device at the QR code</p>
       <div id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
-        <img src="./Marker-Images/button.png" alt="PALY BUTTON" srcset=""
+        <img src="./Marker-Images/PlayButton.png" alt="PALY BUTTON" srcset=""
           style="height: 50px; width: 50px; margin: 5px;">
         <p id="clicktext" class="text">Click <i class="fa fa-hand-o-up"></i> Play</p>
       </div>

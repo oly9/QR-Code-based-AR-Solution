@@ -147,7 +147,8 @@
     .uitop {
       position: absolute; 
       bottom: 0px;  
-      width:100%;  
+      width:100%;
+      height: 100px;  
       display: flex;
       flex-direction: row;       
       justify-content: center; 
@@ -156,7 +157,7 @@
     .inside {
       height: 100%;
       width: 100%;
-      justify-content: flex-end;
+      justify-content: flex-start;
       flex-direction: column;
       text-align: center;      
     }
@@ -195,18 +196,18 @@
 </head>
 
 <body>
-  <div class='upperUI'>
+  <!-- <div class='upperUI'>
     <div id="upperUIHolder" class="topperInner" style="display: none;">
       <p id="" class="text">play</p>
       <p id="" class="text">pause</p>
       <p id="" class="text">shop</p>
     </div>
-  </div>
+  </div> -->
   <div class='uitop'>
     <div class="inside">
       <p id="" class="text">Aim your device at the QR code</p>
       <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
-        <img src="./Marker-Images/button.png" alt="PLAY BUTTON" srcset="" style="height: 50px; width: 50px; margin: 5px;">
+        <img src="./Marker-Images/PlayButton.png" alt="PLAY BUTTON" srcset="" style="height: 50px; width: 50px; margin: 5px;">
         <p id="clicktext" class="text">Click <i class="fa fa-hand-o-up"></i>to Play</p>
       </button>
     </div>
