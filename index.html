@@ -10,6 +10,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      function getDeviceType() {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        if (/android/i.test(userAgent)) {
+          return "android";
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          return "ios";
+        } else {
+          return "others";
+        }
+      }
       const sceneEl = document.querySelector('a-scene');
       let arSystem;
       sceneEl.addEventListener('loaded', function () {
@@ -23,6 +34,10 @@
       // detect target found
       exampleTarget.addEventListener("targetFound", event => {
         temp = true;
+        if(getDeviceType()==="ios")
+        {
+          button.style.display = "block";
+        }
         video.play()
         console.log("target found");
       });
@@ -69,23 +84,10 @@
         console.log("ID: " + id)
       }
 
-      function getDeviceType() {
-        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-        if (/android/i.test(userAgent)) {
-          return "android";
-        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-          return "ios";
-        } else {
-          return "others";
-        }
-      }
+      
 
       console.log("device: " + getDeviceType());
       if (getDeviceType() === "ios") {
-        video.addEventListener("load", (event) => {
-          button.style.display = "block";
-        });
         document.addEventListener('click', () => {
           video.play().then(() => {
             if (temp === true) {
@@ -187,12 +189,11 @@
   <div class='uitop'>
     <div class="inside">
       <p id="" class="text">Aim your device at the QR code</p>
-      <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
+      <div id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
         <img src="./Marker-Images/button.png" alt="PALY BUTTON" srcset=""
           style="height: 50px; width: 50px; margin: 5px;">
         <p id="clicktext" class="text">Click <i class="fa fa-hand-o-up"></i> Play</p>
-      </button>
-
+      </div>
     </div>
 
   </div>
