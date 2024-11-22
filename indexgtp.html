@@ -1,148 +1,182 @@
-<!DOCTYPE html>
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta charset="UTF-8">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
-  <!-- A-Frame and MindAR.js -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const sceneEl = document.querySelector('a-scene');
       let arSystem;
-
       sceneEl.addEventListener('loaded', function () {
         arSystem = sceneEl.systems["mindar-image-system"];
       });
 
       const exampleTarget = document.querySelector('#example-target');
       const video = document.querySelector('#video');
+      const videoEntity = document.querySelector('a-video');
+      const camera = document.querySelector("a-camera");
       const button = document.querySelector('#mutebutton');
-      let temp = false;
+      var temp = false;
 
-      // Debounce for target detection
-      let targetTimeout;
+      // Base scale for consistent video size
+      const baseScale = new THREE.Vector3(2, 2, 1); // Adjust based on your original video size
+      const referenceDistance = 1; // The distance at which the video is at `baseScale`
 
-      // Dynamic URLs
-      const baseUIL = 'https://178.128.116.81/cms/';
-      const fetchDataURL = baseUIL + 'api/uploads/';
-      const urlParams = new URLSearchParams(window.location.search);
-
-      const patternParam = urlParams.get("pattern");
-      const videoParam = urlParams.get("video");
-
-      const patternUrl = patternParam ? fetchDataURL + patternParam : fetchDataURL + "IbX3YGm/marker.patt";
-      const videoUrl = videoParam ? fetchDataURL + videoParam : fetchDataURL + "IbX3YGm/video.mp4";
-
-      // // Set the video source
-      // video.src = videoUrl;
-
-      // Log dynamic URL handling
-      console.log("Marker URL:", patternUrl);
-      console.log("Video URL:", videoUrl);
-
-      // Fallback if video fails to load
-      // video.onerror = () => {
-      //   console.error("Error: Unable to load video file!");
-      // };
-
-      // Target Found Event
-      exampleTarget.addEventListener("targetFound", () => {
-        clearTimeout(targetTimeout); // Clear lost timer
+      // Detect target found
+      exampleTarget.addEventListener("targetFound", event => {
         temp = true;
-        video.play().then(() => {
-          console.log("Video playback started.");
-        }).catch(err => {
-          console.error("Error starting video playback:", err);
-        });
+        video.play();
+        console.log("Target found");
       });
 
-      // Target Lost Event with Debounce
-      exampleTarget.addEventListener("targetLost", () => {
-        targetTimeout = setTimeout(() => {
-          temp = false;
-          video.pause();
-          console.log("Target lost - video paused.");
-        }, 300); // 300ms debounce delay
+      // Detect target lost
+      exampleTarget.addEventListener("targetLost", event => {
+        temp = false;
+        video.pause();
+        console.log("Target lost");
       });
 
-      // iOS Video Playback Handling
+      // Adjust scale dynamically based on distance
+      function updateScale() {
+        if (exampleTarget.object3D.visible) {
+          // Get positions
+          const videoPosition = videoEntity.object3D.getWorldPosition(new THREE.Vector3());
+          const cameraPosition = camera.object3D.getWorldPosition(new THREE.Vector3());
+
+          // Calculate distance
+          const distance = videoPosition.distanceTo(cameraPosition);
+
+          // Adjust scale based on distance
+          const scaleFactor = referenceDistance / distance; // Inversely proportional
+          videoEntity.object3D.scale.copy(baseScale.clone().multiplyScalar(scaleFactor));
+        }
+      }
+
+      // Call on each frame
+      sceneEl.addEventListener("tick", updateScale);
+
+      const fatchdataURL = 'https://178.128.116.81/cms/api/uploads/';
+      const urlObj = new URL(window.location.href);
+      const videoParam = urlObj.searchParams.get("video");
+      const patternParam = urlObj.searchParams.get("pattern");
+
+      console.log("Video:", videoParam);
+
+      var patternUrl = fatchdataURL + "IbX3YGm/marker.patt";
+      var videoUrl = fatchdataURL + "IbX3YGm/video.mp4";
+      var id = "IbX3YGm";
+
+      if (patternParam != null) {
+        patternUrl = fatchdataURL + patternParam;
+        videoUrl = fatchdataURL + videoParam;
+        const words = patternParam.split('/');
+        id = words[0];
+        console.log("ID: " + id);
+      }
+
       function getDeviceType() {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        if (/android/i.test(userAgent)) return "android";
-        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) return "ios";
-        return "others";
+        if (/android/i.test(userAgent)) {
+          return "android";
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          return "ios";
+        } else {
+          return "others";
+        }
       }
 
       if (getDeviceType() === "ios") {
-        button.style.display = "block"; // Show play button for iOS
+        button.style.display = "block";
         document.addEventListener('click', () => {
           video.play().then(() => {
-            button.style.display = "none";
-            console.log("Video playback started on iOS.");
+            if (temp === true) {
+              button.style.display = "none";
+            }
+            console.log('Video playback started successfully.');
           }).catch(err => {
-            console.error("Error starting video playback on iOS:", err);
+            console.error('Error starting video playback:', err);
           });
         });
       }
 
-      // Smooth Object Transformations
-      const smoothPosition = new THREE.Vector3();
-      const smoothingFactor = 0.1;
-
-      sceneEl.addEventListener("update", () => {
-        const object = document.querySelector('a-video').object3D;
-        const currentPosition = object.position;
-
-        // Smooth position update
-        smoothPosition.lerp(currentPosition, smoothingFactor);
-        object.position.copy(smoothPosition);
-      });
-
-      // Log Device Info
-      window.addEventListener("load", () => {
+      window.addEventListener("load", function () {
+        const deviceType = getDeviceType();
         const data = {
-          id: patternParam ? patternParam.split('/')[0] : "IbX3YGm",
-          deviceName: getDeviceType()
+          id: id,
+          deviceName: deviceType
         };
 
         fetch("https://proxy-eqyn.vercel.app/api/proxy", {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify(data)
-        }).then(response => response.json())
+        })
+          .then(response => response.json())
           .then(data => console.log("Device info sent:", data))
           .catch(error => console.error("Error sending device info:", error));
       });
     });
   </script>
-
   <style>
-    .a-enter-vr { display: none; }
+    .a-enter-vr {
+      display: none;
+    }
+    .uitop {
+      position: absolute; 
+      bottom: 0px;  
+      width:100%;  
+      display: flex;
+      flex-direction: row;       
+      justify-content: center; 
+      z-index: 1;
+    }
+    .inside {
+      height: 100%;
+      width: 100%;
+      justify-content: flex-end;
+      flex-direction: column;
+      text-align: center;      
+    }
+    #mutebutton {
+      justify-self: center;
+      padding: 5px;
+    }
+    .text {
+      color: white;
+      text-decoration: double;
+      padding: 0px;
+      margin: 0px;
+      font-size: 14pt;
+      font-family: Arial, Helvetica, sans-serif;
+    }
   </style>
 </head>
 
 <body>
-  <div style='position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: center; z-index: 1;'>
-    <button id="mutebutton" style='display: none; background-color: transparent; border: 0;'>
-      <img src="./Marker-Images/button.png" alt="PLAY BUTTON" style="height: 50px; width: 50px;">
-    </button>
+  <div class='uitop'>
+    <div class="inside">
+      <p id="" class="text">Aim your device at the QR code</p>
+      <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
+        <img src="./Marker-Images/button.png" alt="PLAY BUTTON" style="height: 50px; width: 50px; margin: 5px;">
+        <p id="clicktext" class="text">Click <i class="fa fa-hand-o-up"></i> Play</p>
+      </button>
+    </div>
   </div>
-
   <a-scene mindar-image="imageTargetSrc: ./assects/Pantene.mind;" color-space="sRGB"
-           renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
-           device-orientation-permission-ui="enabled: false">
+    renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
     <a-assets>
-      <video id="video" autoplay="" loop="true" playsinline webkit-playsinline></video>
+      <video id="video" src="./video/AR_Video_File.mp4" autoplay="" loop="true" playsinline webkit-playsinline></video>
     </a-assets>
-
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-
     <a-entity id="example-target" mindar-image-target="targetIndex: 0">
-      <a-video src="#video" position="0 0 0" scale="5 5 1" rotation="0 0 0"></a-video>
+      <a-video src="#video" position="0 0 0" scale="2 2 1" rotation="0 0 0"></a-video>
     </a-entity>
   </a-scene>
 </body>
