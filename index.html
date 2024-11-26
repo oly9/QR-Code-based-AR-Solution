@@ -164,7 +164,7 @@
     .inside {
       height: 100%;
       width: 100%;
-      justify-content: flex-end;
+      justify-content: center;
       flex-direction: column;
       text-align: center;
       padding-bottom: 15px;
@@ -190,7 +190,10 @@
 <body>
   <div class='uitop'>
     <div class="inside">
-      <p id="" class="text">Aim your device at the QR code</p>
+      <div style="width: fit-content; justify-self: center; background: rgba(1, 1, 1, 0.6); padding: 5px;">
+
+        <p id="" class="text" >Aim your device at the QR code</p>
+      </div>
       <div id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
         <img src="./Marker-Images/PlayButton.png" alt="PALY BUTTON" srcset=""
           style="height: 50px; width: 50px; margin: 5px;">
