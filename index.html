@@ -33,11 +33,14 @@
       // Base scale for consistent video size
       const baseScale = new THREE.Vector3(2, 2, 1); // Adjust based on your original video size
       const referenceDistance = 1; // The distance at which the video is at `baseScale`
+      
 
       // Detect target found
       exampleTarget.addEventListener("targetFound", event => {
         temp = true;
         video.play();
+        // Add the animation-mixer component dynamically to play the first animation
+        
         console.log("Target found");
       });
 
@@ -65,19 +68,19 @@
       }
 
       // Function to execute after 32 seconds of video playback
-      function after32Seconds() {
-        console.log("32 seconds of video playback completed!");
-        document.getElementById("#upperUIHolder").style.display = "none";
-        // Add your custom logic here
-      }
+      // function after32Seconds() {
+      //   console.log("32 seconds of video playback completed!");
+      //   document.getElementById("#upperUIHolder").style.display = "none";
+      //   // Add your custom logic here
+      // }
 
-      // Monitor video playback time
-      video.addEventListener("timeupdate", () => {
-        if (video.currentTime >= 32 && !functionInvoked) {
-          functionInvoked = true; // Ensure the function is invoked only once
-          after32Seconds();
-        }
-      });
+      // // Monitor video playback time
+      // video.addEventListener("timeupdate", () => {
+      //   if (video.currentTime >= 32 && !functionInvoked) {
+      //     functionInvoked = true; // Ensure the function is invoked only once
+      //     after32Seconds();
+      //   }
+      // });
 
       // Call on each frame
       sceneEl.addEventListener("tick", updateScale);
@@ -216,8 +219,9 @@
   <div class="d-flex flex-column justify-content-end h-100">
     <div class="d-flex h-25 flex-column justify-content-start pt-5">
       <div class="d-flex justify-content-center ">
-        <div style="width: fit-content; justify-self: center; background: rgba(1, 1, 1, 0.6); padding: 7px; border-radius: 15px 15px 15px 15px;">
-          <p id="" class="text" >Aim your device at the QR code</p>
+        <div
+          style="width: fit-content; justify-self: center; background: rgba(1, 1, 1, 0.6); padding: 7px; border-radius: 15px 15px 15px 15px;">
+          <p id="" class="text">Aim your device at the QR code</p>
         </div>
       </div>
       <div class="d-flex justify-content-center">
@@ -239,8 +243,14 @@
       </button>
     </div>
   </div> -->
-  <a-scene mindar-image="imageTargetSrc: ./assects/Pantene.mind; filterMinCF: 0.001; filterBeta: 0.01; interpolationFactor: 0.8;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" enabled>
+  <a-scene
+    mindar-image="imageTargetSrc: ./assects/Pantene.mind; filterMinCF: 0.001; filterBeta: 0.01; interpolationFactor: 0.8;"
+    color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false" enabled>
     <a-assets>
+      <!-- <a-asset-item id="avatarModel" src="./assects/Video Player Stage/scene.gltf"></a-asset-item> -->
+      <a-asset-item id="avatarModel" src="./assects/VideoPlayerStage (2).glb"></a-asset-item>
+      
       <video id="video" src="./video/AR_Video_File.mp4" autoplay="" loop="true" playsinline webkit-playsinline></video>
     </a-assets>
 
@@ -248,8 +258,8 @@
 
     <a-entity id="example-target" mindar-image-target="targetIndex: 0">
       <!-- <a-plane src="#card" position="0 -.1 -0.1"  color="red" opacity="0.5" scale="2 2.1 1"  rotation="0 0 0"></a-plane>         -->
-      <a-video src="#video" position="0 0 0" scale="2 2 1" rotation="0 0 0"></a-video>
-
+      <a-video src="#video" position="0 0 0" scale="1 1 1" rotation="0 0 0"></a-video>
+      <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="3 3 3" src="#avatarModel" animation-mixer loop>
     </a-entity>
   </a-scene>
 </body>
