@@ -239,9 +239,7 @@
       </button>
     </div>
   </div> -->
-  <a-scene mindar-image="imageTargetSrc: ./assects/Pantene.mind;" color-space="sRGB"
-    renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: false">
+  <a-scene mindar-image="imageTargetSrc: ./assects/Pantene.mind; filterMinCF: 0.001; filterBeta: 0.01; interpolationFactor: 0.8;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" enabled>
     <a-assets>
       <video id="video" src="./video/AR_Video_File.mp4" autoplay="" loop="true" playsinline webkit-playsinline></video>
     </a-assets>
