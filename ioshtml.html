@@ -1,109 +1,27 @@
-<!DOCTYPE html>
+
 <html>
-<head>
-  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-  <!-- we import arjs version without NFT but with marker + location based support -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  <script>
-    var markerFound = 0;
-    AFRAME.registerComponent('button', {
-        init: function ()
-        {
-          var elem = document.documentElement;
-          var marker = document.querySelector("#marker");
-          var fullbutton = document.querySelector("#fullscreen");
-          var Video_0 = document.querySelector("#Video_Asset_0");
-          var button = document.querySelector("#mutebutton");
-          button.hidden = true;
-          Video_0.pause();
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  </head>
+  <body>
+    <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/band.mind; maxTrack: 2" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+      <a-assets>
+        <a-asset-item id="avatarModel" src="./assects/VideoPlayerStage (2).glb"></a-asset-item>
+        <a-asset-item id="bearModel" src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/bear/scene.gltf"></a-asset-item>
+        <a-asset-item id="raccoonModel" src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/raccoon/scene.gltf"></a-asset-item>
+      </a-assets>
 
-          marker.addEventListener("markerFound", function (evt) {
-            markerFound = 1;
-            button.hidden = false;
-            //Video_0.play();  //if video should start immediently on marker detection
-          });
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-          marker.addEventListener("markerLost", function (evt) {
-            markerFound = 0;
-            Video_0.pause();
-            button.hidden = true;
-          });
-
-          button.addEventListener("click", function(evt){
-            console.log("button clicked")
-            if(Video_0.muted==true){
-              button.innerHTML="Pause";
-              Video_0.muted=false;
-              Video_0.play();
-            }else{
-              button.innerHTML="Play";
-              Video_0.muted=true;
-              Video_0.pause();
-            }
-          });
-
-          // fullbutton.addEventListener("click",
-          //   function (evt){
-          //     if (fullscreen == 0) {
-          //       if (elem.requestFullscreen) {
-          //           elem.requestFullscreen();
-          //       } else if (elem.mozRequestFullScreen) {
-          //           /* Firefox */
-          //           elem.mozRequestFullScreen();
-          //       } else if (elem.webkitRequestFullscreen) {
-          //           /* Chrome, Safari and Opera */
-          //           elem.webkitRequestFullscreen();
-          //       } else if (elem.msRequestFullscreen) {
-          //           /* IE/Edge */
-          //           elem.msRequestFullscreen();
-          //       }
-          //       fullbutton.setAttribute("src", "./Marker-Images/106830.png");
-          //       fullscreen = 1;
-          //     } else {
-          //       if (document.exitFullscreen) {
-          //           document.exitFullscreen();
-          //       } else if (document.webkitExitFullscreen) {
-          //           document.webkitExitFullscreen();
-          //       } else if (document.mozCancelFullScreen) {
-          //           document.mozCancelFullScreen();
-          //       } else if (document.msExitFullscreen) {
-          //           document.msExitFullscreen();
-          //       }
-          //       fullbutton.setAttribute("src", "./Marker-Images/10181212.png");
-          //       fullscreen = 0;
-          //     }
-          //   });
-        },
-        tick: function (totalTime, deltaTime)
-        {
-            var dTime = deltaTime / 1000;
-            if (markerFound == 1) {
-            }
-        }
-      });
-  </script>
-</head>
-<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
-  <div style='position: absolute; bottom: 10px; right: 30px; width:100%; text-align: center; z-index: 1;'>
-    <button id="mutebutton" style='position: absolute; bottom: 10px; height: 50px; width: 50px;' hidden>Play</button>
-  </div>
-  <div style='position: absolute; bottom: 5px; left: 30px; width:100%; text-align: right; z-index: 1;'>
-    <input type="image" id="fullscreen" src="./Marker-Images/10181212.png" style='position: absolute; bottom: 0px; right: 35px; height: 50px; width: 50px;'></input>
-  </div>
-  <a-scene embedded arjs="debugUIEnabled: false; sourceType: webcam" vr-mode-ui="enabled: false">
-    <a-entity id="mouseCursor" cursor="rayOrigin: mouse" raycaster="objects: .intersectable; useWorldCoordinates: true;"></a-entity>
-    <a-assets>
-      <video id="Video_Asset_0" autoplay="false" loop crossorigin="anonymous" src="./video/AR_Video_File.mp4" webkit-playsinline playsinline controls muted></video>
-    </a-assets>
-    <a-marker id="marker" type ='pattern' url = './marker-patterns/NewMarker_Scanme.patt' preset='custom' emitevents="true"
-    smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2" button>
-      <a-video src="#Video_Asset_0" id="Video_0" class="intersectable" width="1.5" height="1.5" position="0 0 0" rotation="270 0 0" color="#FFFFFF" transparent=False></a-video>
-    </a-marker>
-    <!-- <a-marker id="d_marker" type ='pattern' url = './marker-patterns/marker_2.patt' preset='custom' emitevents="true"
-                  smooth="true" smoothCount="2" smoothTolerance="0.01" smoothThreshold="2">
-          <a-video  id="player2" src="#video_assect2" width="1.5" heiight="1.5" position="0 0 0" rotation="-90 0 0">  </a-video>
-        </a-marker> -->
-    <a-entity camera></a-entity>
-  </a-scene>
-</body>
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-gltf-model rotation="0 0 0 " position="0 -0.25 0" scale="3 3 3" src="#avatarModel"  animation-mixer>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 1">
+        <a-gltf-model rotation="0 0 0 " position="0 -0.25 0" scale="0.05 0.05 0.05" src="#bearModel" animation-mixer>
+      </a-entity>
+    </a-scene>
+  </body>
 </html>
