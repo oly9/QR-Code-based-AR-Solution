@@ -179,7 +179,7 @@
       const minar = document.getElementById('minar');
 
       // Toggle visibility when the button is clicked
-      
+
       var temp = false
 
       // detect target found
@@ -238,21 +238,22 @@
 
 
       // console.log("device: " + getDeviceType());
-      // if (getDeviceType() === "ios") {
-      //   // button.style.display = "block";
-        
+      // if (getDeviceType() !== "ios") {
+      //   //   // button.style.display = "block";
+      //   minar.setAttribute('visible', false);
       // }
+
       document.addEventListener('click', () => {
-          video.play().then(() => {
-            if (temp === true) {
-              button.style.display = "none";
-              minar.setAttribute('visible', false);
-            }
-            console.log('Video playback started successfully.');
-          }).catch(err => {
-            console.error('Error starting video playback:', err);
-          });
+        video.play().then(() => {
+          if (temp === true) {
+            button.style.display = "none";
+            minar.setAttribute('visible', false);
+          }
+          console.log('Video playback started successfully.');
+        }).catch(err => {
+          console.error('Error starting video playback:', err);
         });
+      });
 
 
       // Smooth Object Transformations
@@ -438,7 +439,7 @@
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <a-entity id="example-target" mindar-image-target="targetIndex: 0">
-      <a-plane id="minar" src="#card" position="0 0 0.15" scale="0.15 0.15 1" rotation="0 0 0"></a-plane>
+      <a-plane id="minar" src="#card" position="0 0 0.15" scale="0.3 0.3 1" rotation="0 0 0"></a-plane>
       <a-video src="#video" position="0 0 0" scale="2 2 2" rotation="0 0 0"></a-video>
       <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="6 6 6" src="#avatarModel" animation-mixer>
 
