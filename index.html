@@ -175,11 +175,17 @@
       const exampleTarget = document.querySelector('#example-target');
       const video = document.querySelector('#video');
       const button = document.querySelector('#mutebutton');
+
+      const minar = document.getElementById('minar');
+
+      // Toggle visibility when the button is clicked
+      
       var temp = false
 
       // detect target found
       exampleTarget.addEventListener("targetFound", event => {
         temp = true;
+        //minar.setAttribute('visible', !minar.getAttribute('visible'));
         if (getDeviceType() === "ios") {
           button.style.display = "block";
         }
@@ -231,22 +237,22 @@
 
 
 
-      console.log("device: " + getDeviceType());
-      if (getDeviceType() === "ios") {
-        // button.style.display = "block";
-        document.addEventListener('click', () => {
+      // console.log("device: " + getDeviceType());
+      // if (getDeviceType() === "ios") {
+      //   // button.style.display = "block";
+        
+      // }
+      document.addEventListener('click', () => {
           video.play().then(() => {
             if (temp === true) {
               button.style.display = "none";
+              minar.setAttribute('visible', false);
             }
             console.log('Video playback started successfully.');
           }).catch(err => {
             console.error('Error starting video playback:', err);
           });
         });
-
-
-      }
 
 
       // Smooth Object Transformations
@@ -399,8 +405,8 @@
       </div>
       <div class="d-flex justify-content-center">
         <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
-          <img src="./Marker-Images/PlayButton.png" alt="PLAY BUTTON" srcset=""
-            style="height: 50px; width: 50px; margin: 5px;">
+          <!-- <img src="./Marker-Images/PlayButton.png" alt="PLAY BUTTON" srcset=""
+            style="height: 50px; width: 50px; margin: 5px;"> -->
           <p id="clicktext" class="text mt-2">Click <i class="fa fa-hand-o-up"></i>to Play</p>
         </button>
       </div>
@@ -422,6 +428,8 @@
     device-orientation-permission-ui="enabled: false">
     <a-assets>
       <!-- <a-asset-item id="avatarModel" src="./assects/Video Player Stage/scene.gltf"></a-asset-item> -->
+
+      <img id="card" src="./Marker-Images/PlayButton.png" style="display: none;" />
       <a-asset-item id="avatarModel" src="./assects/BubblesV2.glb"></a-asset-item>
 
       <video id="video" src="./video/AR_Video_File.mp4" autoplay="" loop="true" playsinline webkit-playsinline></video>
@@ -430,10 +438,10 @@
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <a-entity id="example-target" mindar-image-target="targetIndex: 0">
-      <!-- <a-plane src="#card" position="0 -.1 -0.1"  color="red" opacity="0.5" scale="2 2.1 1"  rotation="0 0 0"></a-plane>         -->
+      <a-plane id="minar" src="#card" position="0 0 0.15" scale="0.15 0.15 1" rotation="0 0 0"></a-plane>
       <a-video src="#video" position="0 0 0" scale="2 2 2" rotation="0 0 0"></a-video>
       <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="6 6 6" src="#avatarModel" animation-mixer>
-        <!-- ="clip: *; loop: once; clampWhenFinished: true;"> -->
+
     </a-entity>
   </a-scene>
 </body>
