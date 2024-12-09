@@ -238,10 +238,10 @@
 
 
       // console.log("device: " + getDeviceType());
-      // if (getDeviceType() !== "ios") {
-      //   //   // button.style.display = "block";
-      //   minar.setAttribute('visible', false);
-      // }
+      if (getDeviceType() !== "ios") {
+        //   // button.style.display = "block";
+        minar.setAttribute('visible', false);
+      }
 
       document.addEventListener('click', () => {
         video.play().then(() => {
