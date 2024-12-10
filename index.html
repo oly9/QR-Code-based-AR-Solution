@@ -197,16 +197,20 @@
         if (getDeviceType() === "ios") {
           button.style.display = "block";
         }
-        
-        gltfModel.components['animation-mixer'].play();
+
         video.play()
+        if (video.paused) {
+          console.log("Paued")
+        } else {
+          gltfModel.components['animation-mixer'].play();
+        }
         console.log("target found");
       });
       // detect target lost
       exampleTarget.addEventListener("targetLost", event => {
         temp = false;
         video.pause();
-        
+
         gltfModel.components['animation-mixer'].pause();
         console.log("target lost");
       });
@@ -256,15 +260,18 @@
       }
 
       document.addEventListener('click', () => {
-        video.play().then(() => {
-          if (temp === true) {
+        if (temp === true) {
+          video.play().then(() => {
             button.style.display = "none";
             minar.setAttribute('visible', false);
-          }
-          console.log('Video playback started successfully.');
-        }).catch(err => {
-          console.error('Error starting video playback:', err);
-        });
+
+            gltfModel.components['animation-mixer'].play();
+            console.log('Video playback started successfully.');
+          }).catch(err => {
+            console.error('Error starting video playback:', err);
+          });
+
+        }
       });
 
 
