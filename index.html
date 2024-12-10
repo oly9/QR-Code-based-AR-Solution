@@ -381,34 +381,6 @@
 
 
   <div class="d-flex flex-column justify-content-end h-100">
-    <!-- <div class="d-flex h-25">
-
-    </div>
-    <div class="d-flex h-50 justify-content-center">
-
-      <button id="mutebutton" style='display: block; background-color: transparent; border: 0px;'>
-        <img src="./Marker-Images/PlayButton.png" alt="PLAY BUTTON" srcset=""
-          style="height: 50px; width: 50px; margin: 5px;">
-         <p id="clicktext" class="text mt-2">Click <i class="fa fa-hand-o-up"></i>to Play</p> 
-      </button>
-
-    </div>
-    <div class="d-flex h-25 justify-content-center pt-5">
-      <div class="d-block justify-content-center">
-        <div
-          style="width: fit-content; justify-self: center; background: rgba(1, 1, 1, 0.6); padding: 7px; border-radius: 15px 15px 15px 15px;">
-          <p id="" class="text">Aim your device at the QR code</p>
-        </div>
-      </div>
-    </div> -->
-
-    <!-- <div class="d-flex justify-content-center h-100 bg-dark">
-      <button id="mutebutton" style='display: block; background-color: transparent; border: 0px;'>
-        <img src="./Marker-Images/PlayButton.png" alt="PLAY BUTTON" srcset=""
-          style="height: 50px; width: 50px; margin: 5px;">
-        <p id="clicktext" class="text mt-2">Click <i class="fa fa-hand-o-up"></i>to Play</p>
-      </button>
-    </div> -->
     <div class="d-flex h-25 flex-column justify-content-start ">
       <div class="d-flex justify-content-center ">
         <div
@@ -443,18 +415,19 @@
       <!-- <a-asset-item id="avatarModel" src="./assects/Video Player Stage/scene.gltf"></a-asset-item> -->
 
       <img id="card" src="./Marker-Images/PlayButton2.png" style="display: none;" />
-      <a-asset-item id="avatarModel" src="./assects/BubblesV3.glb"></a-asset-item>
-
+      <a-asset-item id="button" src="./NewModes/PlayButton.glb"></a-asset-item>
+      <a-asset-item id="avatarModel" src="./NewModes/Bubbles.glb"></a-asset-item>
       <video id="video" src="./video/AR_Video_File.mp4" autoplay="" loop="true" playsinline webkit-playsinline></video>
     </a-assets>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <a-entity id="example-target" mindar-image-target="targetIndex: 0">
-      <a-plane id="minar" src="#card" position="0 0 0.15" scale="0.3 0.3 1" rotation="0 0 0"></a-plane>
+      <!-- <a-plane id="minar" src="#card" position="0 0 0.15" scale="0.3 0.3 1" rotation="0 0 0"></a-plane> -->
       <a-video src="#video" position="0 0 0" scale="2 2 2" rotation="0 0 0"></a-video>
       <a-gltf-model id="animated-model" rotation="0 0 0 " position="0 0 0" scale="6 6 6" src="#avatarModel"
         animation-mixer>
+        <a-gltf-model id="minar" rotation="0 0 0 " position="0 0 0" scale=".5 .5 .5" src="#button">
 
     </a-entity>
   </a-scene>
