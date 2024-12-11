@@ -210,7 +210,6 @@
       exampleTarget.addEventListener("targetLost", event => {
         temp = false;
         video.pause();
-
         gltfModel.components['animation-mixer'].pause();
         console.log("target lost");
       });
@@ -264,7 +263,6 @@
           video.play().then(() => {
             button.style.display = "none";
             minar.setAttribute('visible', false);
-
             gltfModel.components['animation-mixer'].play();
             console.log('Video playback started successfully.');
           }).catch(err => {
