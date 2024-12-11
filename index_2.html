@@ -19,7 +19,141 @@
   <!-- Latest compiled JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const sceneEl = document.querySelector('a-scene');
+      let arSystem;
+      sceneEl.addEventListener('loaded', function () {
+        arSystem = sceneEl.systems["mindar-image-system"];
+      });
 
+      const exampleTarget = document.querySelector('#example-target');
+      const video = document.querySelector('#video');
+      const videoEntity = document.querySelector('a-video');
+      const camera = document.querySelector("a-camera");
+      const button = document.querySelector('#mutebutton');
+      let temp = false;
+      let functionInvoked = false; // To ensure the function runs only once after 32 seconds
+
+      // Base scale for consistent video size
+      const baseScale = new THREE.Vector3(2, 2, 1); // Adjust based on your original video size
+      const referenceDistance = 1; // The distance at which the video is at `baseScale`
+      
+
+      // Detect target found
+      exampleTarget.addEventListener("targetFound", event => {
+        temp = true;
+        video.play();
+        // Add the animation-mixer component dynamically to play the first animation
+        
+        console.log("Target found");
+      });
+
+      // Detect target lost
+      exampleTarget.addEventListener("targetLost", event => {
+        temp = false;
+        video.pause();
+        console.log("Target lost");
+      });
+
+      // Adjust scale dynamically based on distance
+      function updateScale() {
+        if (exampleTarget.object3D.visible) {
+          // Get positions
+          const videoPosition = videoEntity.object3D.getWorldPosition(new THREE.Vector3());
+          const cameraPosition = camera.object3D.getWorldPosition(new THREE.Vector3());
+
+          // Calculate distance
+          const distance = videoPosition.distanceTo(cameraPosition);
+
+          // Adjust scale based on distance
+          const scaleFactor = referenceDistance / distance; // Inversely proportional
+          videoEntity.object3D.scale.copy(baseScale.clone().multiplyScalar(scaleFactor));
+        }
+      }
+
+      // Function to execute after 32 seconds of video playback
+      // function after32Seconds() {
+      //   console.log("32 seconds of video playback completed!");
+      //   document.getElementById("#upperUIHolder").style.display = "none";
+      //   // Add your custom logic here
+      // }
+
+      // // Monitor video playback time
+      // video.addEventListener("timeupdate", () => {
+      //   if (video.currentTime >= 32 && !functionInvoked) {
+      //     functionInvoked = true; // Ensure the function is invoked only once
+      //     after32Seconds();
+      //   }
+      // });
+
+      // Call on each frame
+      sceneEl.addEventListener("tick", updateScale);
+
+      const fatchdataURL = 'https://178.128.116.81/cms/api/uploads/';
+      const urlObj = new URL(window.location.href);
+      const videoParam = urlObj.searchParams.get("video");
+      const patternParam = urlObj.searchParams.get("pattern");
+
+      console.log("Video:", videoParam);
+
+      var patternUrl = fatchdataURL + "IbX3YGm/marker.patt";
+      var videoUrl = fatchdataURL + "IbX3YGm/video.mp4";
+      var id = "IbX3YGm";
+
+      if (patternParam != null) {
+        patternUrl = fatchdataURL + patternParam;
+        videoUrl = fatchdataURL + videoParam;
+        const words = patternParam.split('/');
+        id = words[0];
+        console.log("ID: " + id);
+      }
+
+      function getDeviceType() {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        if (/android/i.test(userAgent)) {
+          return "android";
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          return "ios";
+        } else {
+          return "others";
+        }
+      }
+
+      if (getDeviceType() === "ios") {
+        button.style.display = "block";
+        document.addEventListener('click', () => {
+          video.play().then(() => {
+            if (temp === true) {
+              button.style.display = "none";
+            }
+            console.log('Video playback started successfully.');
+          }).catch(err => {
+            console.error('Error starting video playback:', err);
+          });
+        });
+      }
+
+      window.addEventListener("load", function () {
+        const deviceType = getDeviceType();
+        const data = {
+          id: id,
+          deviceName: deviceType
+        };
+
+        fetch("https://proxy-eqyn.vercel.app/api/proxy", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(response => response.json())
+          .then(data => console.log("Device info sent:", data))
+          .catch(error => console.error("Error sending device info:", error));
+      });
+    });
+  </script> -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       function getDeviceType() {
@@ -38,8 +172,6 @@
       sceneEl.addEventListener('loaded', function () {
         arSystem = sceneEl.systems["mindar-image-system"];
       });
-
-      /////////////////////////////////////////////////////////////////////////////
       const exampleTarget = document.querySelector('#example-target');
       const video = document.querySelector('#video');
       const button = document.querySelector('#mutebutton');
@@ -47,66 +179,16 @@
       const minar = document.getElementById('minar');
 
       const gltfModel = document.querySelector('#animated-model');
-      var temp = false;
-      var animatonPlay = false;
-      var current = video.currentTime;
-      console.log(current)
 
       gltfModel.addEventListener('model-loaded', () => {
         // Pause the animation-mixer immediately
-        gltfModel.components['animation-mixer'].play();
-        setTimeout(() => {
-          gltfModel.components['animation-mixer'].pause();
-
-        }, 100);
+        gltfModel.components['animation-mixer'].pause();
         console.log('Animation paused on load');
       });
 
-      // const delayInput = document.getElementById('delayInput'); // Input for delay
-      // const videoTime = document.getElementById('videoTime'); // Input for delay
-      let delay = 0;
-
-      // delayInput.addEventListener('input', () => {
-      //   const value = delayInput.value;
-      //   console.log(`Input changed: ${value}`);
-      // });
-
-      // // Detect changes on blur (when the input loses focus)
-      // delayInput.addEventListener('change', () => {
-      //   console.log(`Final input value after focus lost: ${delayInput.value}`);
-      //   delay = parseFloat(delayInput.value)
-      // });
-
-      // Default delay
-
-      video.addEventListener('timeupdate', () => {
-        current = video.currentTime;
-        //videoTime.textContent = current;
-        console.log(current)
-        console.log("==>" + delay)
-        if (delay < current) {
-          animatonPlay = true
-          gltfModel.components['animation-mixer'].play();
-          console.log(animatonPlay)
-        }
-        else if (current < .001) {
-          
-          const animationMixer = gltfModel.components['animation-mixer'];
-          const actions = animationMixer.mixer._actions; // Retrieve animation actions
-
-          if (actions.length > 0) {
-            actions.forEach(action => {
-              action.stop();  // Stop the animation if running
-              action.reset(); // Reset animation to the first frame
-              action.play();  // Play animation from the beginning
-            });
-          }
-        }
-      });
       // Toggle visibility when the button is clicked
 
-
-
+      var temp = false
 
       // detect target found
       exampleTarget.addEventListener("targetFound", event => {
@@ -114,25 +196,20 @@
         //minar.setAttribute('visible', !minar.getAttribute('visible'));
         if (getDeviceType() === "ios") {
           button.style.display = "block";
-          if (current > 0) {
-            video.play();
-          }
         }
-        else {
-          video.play();
-        }
-        console.log("target found");
-        if (animatonPlay) {
 
+        video.play()
+        if (video.paused) {
+          console.log("Paued")
+        } else {
           gltfModel.components['animation-mixer'].play();
         }
-
+        console.log("target found");
       });
       // detect target lost
       exampleTarget.addEventListener("targetLost", event => {
         temp = false;
         video.pause();
-
         gltfModel.components['animation-mixer'].pause();
         console.log("target lost");
       });
@@ -186,13 +263,13 @@
           video.play().then(() => {
             button.style.display = "none";
             minar.setAttribute('visible', false);
+            gltfModel.components['animation-mixer'].play();
             console.log('Video playback started successfully.');
           }).catch(err => {
             console.error('Error starting video playback:', err);
           });
 
         }
-
       });
 
 
@@ -203,6 +280,8 @@
       sceneEl.addEventListener("update", () => {
         const object = document.querySelector('a-video').object3D;
         const currentPosition = object.position;
+
+
         // Smooth position update
         smoothPosition.lerp(currentPosition, smoothingFactor);
         object.position.copy(smoothPosition);
@@ -297,6 +376,15 @@
 </head>
 
 <body class="continer-fluid">
+  <!-- <div class='upperUI'>
+    <div id="upperUIHolder" class="topperInner" style="display: none;">
+      <p id="" class="text">play</p>
+      <p id="" class="text">pause</p>
+      <p id="" class="text">shop</p>
+    </div>
+  </div> -->
+
+
   <div class="d-flex flex-column justify-content-end h-100">
     <div class="d-flex h-25 flex-column justify-content-start ">
       <div class="d-flex justify-content-center ">
@@ -307,19 +395,23 @@
       </div>
       <div class="d-flex justify-content-center">
         <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
+          <!-- <img src="./Marker-Images/PlayButton.png" alt="PLAY BUTTON" srcset=""
+            style="height: 50px; width: 50px; margin: 5px;"> -->
+          <!-- <p id="clicktext" class="text mt-2">Click <i class="fa fa-hand-o-up"></i>to Play</p> -->
         </button>
-        <!-- <div
-          style="position: absolute; top: 10px; left: 10px; z-index: 10; background: rgba(255, 255, 255, 0.8); padding: 10px; border-radius: 5px;">
-          <label for="Video Time">Chagne the value befor placing marker, if you want to recheck please reload again</label><br/>
-          <label for="Video Time">Video Current Time(s):</label>
-          <p id="videoTime">0.0</p>
-          <label for="delayInput">Set Animation Delay(s):</label>
-          <input id="delayInput" type="number" value="0.0" style="width: 80px;" />
-        </div> -->
       </div>
     </div>
   </div>
-
+  <!-- <div class='uitop'>
+    <div class="inside">
+      <p id="" class="text">Aim your device at the QR code</p>
+      <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
+        <img src="./Marker-Images/PlayButton.png" alt="PLAY BUTTON" srcset=""
+          style="height: 50px; width: 50px; margin: 5px;">
+        <p id="clicktext" class="text">Click <i class="fa fa-hand-o-up"></i>to Play</p>
+      </button>
+    </div>
+  </div> -->
   <a-scene
     mindar-image="imageTargetSrc: ./assects/Pantene.mind; filterMinCF: 0.001; filterBeta: 0.01; interpolationFactor: 0.8"
     enabled color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
@@ -327,8 +419,8 @@
     <a-assets>
       <!-- <a-asset-item id="avatarModel" src="./assects/Video Player Stage/scene.gltf"></a-asset-item> -->
 
-      <a-asset-item id="button" src="./NewModes/PlayButtonV2.glb"></a-asset-item>
-      <a-asset-item id="avatarModel" src="./NewModes/BubblesV4.glb"></a-asset-item>
+      <a-asset-item id="button" src="./NewModes/PlayButton.glb"></a-asset-item>
+      <a-asset-item id="avatarModel" src="./NewModes/BubblesV2_1.glb"></a-asset-item>
       <video id="video" src="./video/AR_Video_File.mp4" autoplay="" loop="true" playsinline webkit-playsinline></video>
     </a-assets>
 
@@ -338,7 +430,7 @@
       <!-- <a-plane id="minar" src="#card" position="0 0 0.15" scale="0.3 0.3 1" rotation="0 0 0"></a-plane> -->
       <a-video src="#video" position="0 0 0" scale="2 2 2" rotation="0 0 0"></a-video>
       <a-gltf-model id="animated-model" rotation="0 0 0 " position="0 0 0" scale="6 6 6" src="#avatarModel"
-        animation-mixer="clip: *; loop: loop; startAt: 0.1;">
+        animation-mixer>
         <a-gltf-model id="minar" rotation="0 0 0 " position="0 0 0" scale=".5 .5 .5" src="#button">
 
     </a-entity>
