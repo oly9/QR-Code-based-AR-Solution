@@ -62,26 +62,26 @@
         console.log('Animation paused on load');
       });
 
-      const delayInput = document.getElementById('delayInput'); // Input for delay
-      const videoTime = document.getElementById('videoTime'); // Input for delay
-      let delay = parseFloat(delayInput.value);
+      // const delayInput = document.getElementById('delayInput'); // Input for delay
+      // const videoTime = document.getElementById('videoTime'); // Input for delay
+      let delay = 0;
 
-      delayInput.addEventListener('input', () => {
-        const value = delayInput.value;
-        console.log(`Input changed: ${value}`);
-      });
+      // delayInput.addEventListener('input', () => {
+      //   const value = delayInput.value;
+      //   console.log(`Input changed: ${value}`);
+      // });
 
-      // Detect changes on blur (when the input loses focus)
-      delayInput.addEventListener('change', () => {
-        console.log(`Final input value after focus lost: ${delayInput.value}`);
-        delay = parseFloat(delayInput.value)
-      });
+      // // Detect changes on blur (when the input loses focus)
+      // delayInput.addEventListener('change', () => {
+      //   console.log(`Final input value after focus lost: ${delayInput.value}`);
+      //   delay = parseFloat(delayInput.value)
+      // });
 
-       // Default delay
+      // Default delay
 
       video.addEventListener('timeupdate', () => {
         current = video.currentTime;
-        videoTime.textContent = current;
+        //videoTime.textContent = current;
         console.log(current)
         console.log("==>" + delay)
         if (delay < current) {
@@ -89,8 +89,22 @@
           gltfModel.components['animation-mixer'].play();
           console.log(animatonPlay)
         }
+        else if (current < .001) {
+          
+          const animationMixer = gltfModel.components['animation-mixer'];
+          const actions = animationMixer.mixer._actions; // Retrieve animation actions
+
+          if (actions.length > 0) {
+            actions.forEach(action => {
+              action.stop();  // Stop the animation if running
+              action.reset(); // Reset animation to the first frame
+              action.play();  // Play animation from the beginning
+            });
+          }
+        }
       });
       // Toggle visibility when the button is clicked
+
 
 
 
@@ -100,21 +114,19 @@
         //minar.setAttribute('visible', !minar.getAttribute('visible'));
         if (getDeviceType() === "ios") {
           button.style.display = "block";
-          if(current>0)
-          {
+          if (current > 0) {
             video.play();
           }
         }
-        else
-        {
+        else {
           video.play();
         }
         console.log("target found");
         if (animatonPlay) {
-          
+
           gltfModel.components['animation-mixer'].play();
         }
-        
+
       });
       // detect target lost
       exampleTarget.addEventListener("targetLost", event => {
@@ -296,14 +308,14 @@
       <div class="d-flex justify-content-center">
         <button id="mutebutton" style='display: none; background-color: transparent; border: 0px;'>
         </button>
-        <div
+        <!-- <div
           style="position: absolute; top: 10px; left: 10px; z-index: 10; background: rgba(255, 255, 255, 0.8); padding: 10px; border-radius: 5px;">
           <label for="Video Time">Chagne the value befor placing marker, if you want to recheck please reload again</label><br/>
           <label for="Video Time">Video Current Time(s):</label>
           <p id="videoTime">0.0</p>
           <label for="delayInput">Set Animation Delay(s):</label>
           <input id="delayInput" type="number" value="0.0" style="width: 80px;" />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
